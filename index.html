@@ -385,7 +385,7 @@
             startBtn.textContent = 'Generating story...';
 
             try {
-                const response = await fetch('https://api.anthropic.com/v1/messages', {
+                const response = await fetch('/api/generateStory', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -577,7 +577,7 @@ Make it engaging and appropriate for high school students to practice headline w
                 return `Headline ${h.headlineNumber} (${h.totalLines}-line):\n${lines}`;
             }).join('\n\n');
 
-            const response = await fetch('https://api.anthropic.com/v1/messages', {
+            const response = await fetch('/api/evaluateHeadlines', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
