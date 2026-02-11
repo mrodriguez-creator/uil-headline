@@ -587,7 +587,7 @@ Make it engaging and appropriate for high school students to practice headline w
                     max_tokens: 3000,
                     messages: [{
                         role: 'user',
-                        content: `You are a UIL Headline Writing judge. Evaluate these student headlines based on UIL criteria:
+                        content: `You are a UIL Headline Writing judge. Grade these student headlines using the official UIL scoring rubric (0-4 points per headline).
 
 STORY:
 ${currentStory}
@@ -595,35 +595,91 @@ ${currentStory}
 STUDENT HEADLINES:
 ${headlinesText}
 
-UIL JUDGING CRITERIA:
-1. Character count accuracy (must be within required range)
-2. Accuracy to story content
-3. Active voice and present tense
-4. Proper capitalization (upstyle or downstyle)
-5. No unnecessary articles or words
-6. Clear and compelling
-7. Grammar and punctuation
-8. "Tell and sell" the story
+OFFICIAL UIL GRADING RUBRIC (0-4 POINTS):
+
+**ZERO POINTS (Disqualified):**
+- Over count or under count (if intentional error to fix count = DQ, other headlines get at least 1 point)
+- The ONLY DQ is over/under count
+
+**Give ONLY 1 POINT:**
+- Misspellings
+- Fact errors
+- Passive voice verbs (is given, was studied, etc.)
+- ALL verbs not written in present or future tense (OK: speak, will resign; NOT OK: spoke, resigned, -ed/-en ending)
+- Past tense verbs get 1 point
+- Labels (main headlines with NO verb - short hammers don't need verb but main headlines MUST have a verb)
+- Repeated words in same headline
+- Using ? & , ! and most abbreviations (months, states NOT correct as abbreviations)
+- A, an, the (comma/period replace 'and') unless in book/movie titles
+- Opinion (adjectives/adverbs) - red car is OK; sloppy is NOT
+- 2-line or 3-line headline that doesn't read as 1 sentence
+- First & last names together (use 1 name, NOT both)
+- No text words, no slang, no say kids
+- Don't confuse labels or titles with headlines (headlines have subject & present tense verb)
+- Acronyms not used in story
+- Use of Leaguetown, LHS or 'our school' (L-words not allowed in ANY UIL journalism)
+
+**Give 2 POINTS:**
+- Headline misses main idea
+- First names used (with/out last name) - Exception: 2 people w/same last name
+- Bad word splits, especially line 1 to line 2 (infinitive 'to' should not split from its object, nor a preposition from its object on 1 line with noun on next line)
+- Per AP, word splits from line 2 to line 3 are acceptable, but from lines 1 to 2 are not
+- JUDgiNG NOTE: In ties, bad word splits lose
+- "Double quotation marks" - Use 'single marks only'
+- Widely-known acronyms (YMCA) acceptable, but rarely. StuCo is not
+- Comma separates 1 subj/2 vrbs BUT semicolon MUST separate 2 subjs + 2 vrbs → 2 different sentences
+
+**Give 3 POINTS:**
+- Summarizes main element of story fairly well with info taken from opening/lead ¶
+- Headlines should come from TOP/2 leads (first 2 ¶s of story, not some insignificant details way down below)
+- Subject + active present tense verb + direct object (when applicable)
+- Headline is okay or correct, but not outstanding
+- Facts, spelling and mechanics correct
+- NOT trite or cutesy
+
+**Give 4 POINTS:**
+- A solid summary, maybe clever or play on words
+- NAILS the lead/first 2 ¶s with most important info; uses future element, NOT stale, old news
+- Clearly tells the story, with every word needed
+- Strong verb - Present Tense & Active Voice
+- Mechanics, verb tense, facts, spelling correct
+
+CRITICAL RULES TO ENFORCE:
+1. ACTIVE VOICE REQUIRED: "Student wins award" NOT "Award won by student"
+2. PRESENT/FUTURE TENSE: "Board approves" NOT "Board approved"
+3. NO PASSIVE: "is given, was studied, been" = automatic 1 point
+4. SUBJECT + VERB + OBJECT format
+5. Multi-line headlines MUST read as ONE complete sentence
+6. Don't split verb phrases awkwardly between lines
+7. Use commas for 'and' - semicolons separate 2 complete clauses
+8. No abbreviations unless in the story
+9. Facts must match story exactly
+10. Use LAST names only (not first, not both)
+
+NOTES: 
+- Block letters acceptable (no penalty)
+- Use % sign, not word
+- Single-digit numbers as words or digits (be consistent, don't BEGIN headline with digit)
 
 For each headline, provide:
-- Score (0-3, where 3 is perfect)
-- What works well
-- Specific improvements needed
-- Suggested revision (if score < 3)
+- Score (0-4 using rubric above)
+- What works well (if any)
+- Specific improvements with rubric justification
+- Suggested revision (if score < 4)
 
 Format as JSON:
 {
   "headlines": [
     {
       "number": 1,
-      "score": 0-3,
+      "score": 0-4,
       "strengths": ["strength1", "strength2"],
-      "improvements": ["improvement1", "improvement2"],
+      "improvements": ["improvement1 (cite rubric category)", "improvement2"],
       "suggestedRevision": "better headline" or null,
-      "feedback": "detailed explanation"
+      "feedback": "detailed explanation citing rubric"
     }
   ],
-  "overallScore": 0-18,
+  "overallScore": 0-24,
   "overallFeedback": "summary of performance"
 }`
                     }]
@@ -653,13 +709,13 @@ Format as JSON:
             const overallCard = document.createElement('div');
             overallCard.className = 'feedback-card';
             
-            const scoreClass = evaluation.overallScore >= 15 ? 'excellent' :
-                              evaluation.overallScore >= 12 ? 'good' :
-                              evaluation.overallScore >= 9 ? 'fair' : 'needs-work';
+            const scoreClass = evaluation.overallScore >= 20 ? 'excellent' :
+                              evaluation.overallScore >= 15 ? 'good' :
+                              evaluation.overallScore >= 10 ? 'fair' : 'needs-work';
             
             overallCard.innerHTML = `
                 <div class="feedback-headline">Overall Performance</div>
-                <div class="score ${scoreClass}">Score: ${evaluation.overallScore}/18</div>
+                <div class="score ${scoreClass}">Score: ${evaluation.overallScore}/24</div>
                 <div class="feedback-text">${evaluation.overallFeedback}</div>
             `;
             feedbackDiv.appendChild(overallCard);
@@ -671,14 +727,14 @@ Format as JSON:
 
                 const studentHeadline = headlines[index].lines.map(l => l.text).join('<br>');
                 
-                const scoreClass = hl.score === 3 ? 'excellent' :
-                                  hl.score === 2 ? 'good' :
-                                  hl.score === 1 ? 'fair' : 'needs-work';
+                const scoreClass = hl.score === 4 ? 'excellent' :
+                                  hl.score === 3 ? 'good' :
+                                  hl.score === 2 || hl.score === 1 ? 'fair' : 'needs-work';
 
                 let html = `
                     <div class="feedback-headline">Headline ${hl.number}</div>
                     <div class="your-headline">${studentHeadline}</div>
-                    <div class="score ${scoreClass}">Score: ${hl.score}/3</div>
+                    <div class="score ${scoreClass}">Score: ${hl.score}/4</div>
                 `;
 
                 if (hl.strengths && hl.strengths.length > 0) {
