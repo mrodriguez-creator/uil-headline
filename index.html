@@ -574,6 +574,9 @@
                 <button class="mode-btn" onclick="setMode('timed')" id="mode-timed">Timed Mode (30 min)</button>
                 <button class="mode-btn" onclick="setMode('mock')" id="mode-mock">Mock Contest</button>
             </div>
+            <div id="mode-descriptions" style="font-size: 13px; color: #666; text-align: center; margin: 0 0 15px; font-family: -apple-system, BlinkMacSystemFont, sans-serif; line-height: 1.5;">
+                <span id="mode-desc-text"><strong style="color: #667eea;">Practice Mode:</strong> No timer. Real-time rule violation hints appear as you type. Get full AI feedback after submitting.</span>
+            </div>
 
             <div id="start-section">
                 <div style="text-align: center; padding: 40px 0;">
@@ -744,11 +747,19 @@
         // Feature 2 & 4: Mode Selection & Timer
         // =============================================
 
+        var modeDescriptions = {
+            practice: '<strong style="color: #667eea;">Practice Mode:</strong> No timer. Real-time rule violation hints appear as you type. Get full AI feedback after submitting.',
+            timed: '<strong style="color: #e67e22;">Timed Mode:</strong> 30-minute countdown. Rule violation hints still active. Warnings at 10, 5, and 1 minute. Option to keep editing if time runs out.',
+            mock: '<strong style="color: #e74c3c;">Mock Contest:</strong> Simulates a real UIL contest. 30-minute countdown with no rule hints. When time expires, you must submit. No safety net.'
+        };
+
         function setMode(mode) {
             currentMode = mode;
             document.getElementById('mode-practice').className = 'mode-btn' + (mode === 'practice' ? ' active' : '');
             document.getElementById('mode-timed').className = 'mode-btn' + (mode === 'timed' ? ' active' : '');
             document.getElementById('mode-mock').className = 'mode-btn' + (mode === 'mock' ? ' mock-active' : '');
+
+            document.getElementById('mode-desc-text').innerHTML = modeDescriptions[mode];
 
             if (mode === 'practice' && timerRunning) {
                 stopTimer();
