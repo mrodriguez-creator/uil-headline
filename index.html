@@ -233,25 +233,10 @@
             margin: 10px 0;
         }
 
-        .score.excellent {
-            background: #4caf50;
-            color: white;
-        }
-
-        .score.good {
-            background: #2196f3;
-            color: white;
-        }
-
-        .score.fair {
-            background: #ff9800;
-            color: white;
-        }
-
-        .score.needs-work {
-            background: #f44336;
-            color: white;
-        }
+        .score.excellent { background: #4caf50; color: white; }
+        .score.good { background: #2196f3; color: white; }
+        .score.fair { background: #ff9800; color: white; }
+        .score.needs-work { background: #f44336; color: white; }
 
         .feedback-text {
             line-height: 1.6;
@@ -323,71 +308,38 @@
             line-height: 1.4;
         }
 
-        .violation-tag.article {
-            background: #fff3cd;
-            color: #856404;
-            border: 1px solid #ffc107;
-        }
-
-        .violation-tag.past-tense {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-
-        .violation-tag.passive-voice {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-
-        .violation-tag.l-word {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .violation-tag.punctuation {
-            background: #cce5ff;
-            color: #004085;
-            border: 1px solid #b8daff;
-        }
-
-        .violation-tag.name-issue {
-            background: #e2d5f1;
-            color: #4a235a;
-            border: 1px solid #d2b4de;
-        }
+        .violation-tag.article { background: #fff3cd; color: #856404; border: 1px solid #ffc107; }
+        .violation-tag.past-tense { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .violation-tag.passive-voice { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .violation-tag.l-word { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .violation-tag.punctuation { background: #cce5ff; color: #004085; border: 1px solid #b8daff; }
+        .violation-tag.name-issue { background: #e2d5f1; color: #4a235a; border: 1px solid #d2b4de; }
 
         /* --- Feature 2: Timed Practice Mode --- */
         .mode-selector {
             display: flex;
             justify-content: center;
-            gap: 12px;
+            gap: 10px;
             margin: 20px 0 10px;
+            flex-wrap: wrap;
         }
 
         .mode-btn {
-            padding: 10px 24px;
+            padding: 10px 20px;
             border: 2px solid #667eea;
             border-radius: 6px;
             background: white;
             color: #667eea;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
             font-family: Georgia, serif;
             transition: all 0.2s;
         }
 
-        .mode-btn:hover {
-            background: #f0f0ff;
-        }
-
-        .mode-btn.active {
-            background: #667eea;
-            color: white;
-        }
+        .mode-btn:hover { background: #f0f0ff; }
+        .mode-btn.active { background: #667eea; color: white; }
+        .mode-btn.mock-active { background: #e74c3c; color: white; border-color: #e74c3c; }
 
         .timer-bar {
             display: none;
@@ -405,28 +357,15 @@
             border-radius: 12px 12px 0 0;
         }
 
-        .timer-bar.visible {
-            display: block;
-        }
-
-        .timer-bar.warning-10 {
-            background: #e67e22;
-        }
-
-        .timer-bar.warning-5 {
-            background: #e74c3c;
-            animation: pulse 1s ease-in-out infinite;
-        }
-
-        .timer-bar.warning-1 {
-            background: #c0392b;
-            animation: pulse 0.5s ease-in-out infinite;
-        }
-
-        .timer-bar.expired {
-            background: #7f8c8d;
-            animation: none;
-        }
+        .timer-bar.visible { display: block; }
+        .timer-bar.warning-10 { background: #e67e22; }
+        .timer-bar.warning-5 { background: #e74c3c; animation: pulse 1s ease-in-out infinite; }
+        .timer-bar.warning-1 { background: #c0392b; animation: pulse 0.5s ease-in-out infinite; }
+        .timer-bar.expired { background: #7f8c8d; animation: none; }
+        .timer-bar.mock { background: #c0392b; }
+        .timer-bar.mock.warning-10 { background: #e67e22; }
+        .timer-bar.mock.warning-5 { background: #e74c3c; animation: pulse 1s ease-in-out infinite; }
+        .timer-bar.mock.warning-1 { background: #c0392b; animation: pulse 0.5s ease-in-out infinite; }
 
         @keyframes pulse {
             0%, 100% { opacity: 1; }
@@ -436,19 +375,14 @@
         .time-up-overlay {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(0,0,0,0.7);
             z-index: 200;
             justify-content: center;
             align-items: center;
         }
 
-        .time-up-overlay.visible {
-            display: flex;
-        }
+        .time-up-overlay.visible { display: flex; }
 
         .time-up-card {
             background: white;
@@ -459,46 +393,160 @@
             margin: 20px;
         }
 
-        .time-up-card h2 {
-            font-size: 2em;
-            color: #e74c3c;
-            margin-bottom: 15px;
+        .time-up-card h2 { font-size: 2em; color: #e74c3c; margin-bottom: 15px; }
+        .time-up-card p { color: #666; font-size: 1.1em; margin-bottom: 10px; }
+
+        /* --- Feature 6: Side-by-Side Comparison --- */
+        .comparison-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 12px 0;
         }
 
-        .time-up-card p {
+        .comparison-col {
+            padding: 12px;
+            border-radius: 6px;
+            font-family: Georgia, serif;
+            font-size: 1.05em;
+        }
+
+        .comparison-col.yours {
+            background: #f5f5f5;
+            border: 2px solid #e0e0e0;
+        }
+
+        .comparison-col.suggested {
+            background: #e8f5e9;
+            border: 2px solid #66bb6a;
+        }
+
+        .comparison-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        .comparison-col.yours .comparison-label { color: #999; }
+        .comparison-col.suggested .comparison-label { color: #2e7d32; }
+
+        /* --- Feature 5: Weakness Dashboard --- */
+        .dashboard-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #9c27b0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .dashboard-title {
+            font-size: 1.2em;
+            color: #9c27b0;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .weakness-bar-container {
+            margin: 10px 0;
+        }
+
+        .weakness-bar-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            margin-bottom: 4px;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        .weakness-bar-label .cat-name { color: #444; font-weight: 600; }
+        .weakness-bar-label .cat-count { color: #999; }
+
+        .weakness-bar {
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .weakness-bar-fill {
+            height: 100%;
+            border-radius: 5px;
+            transition: width 0.5s;
+        }
+
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .stat-box {
+            text-align: center;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+
+        .stat-number {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 12px;
             color: #666;
-            font-size: 1.1em;
-            margin-bottom: 10px;
+            margin-top: 4px;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        .dashboard-actions {
+            margin-top: 15px;
+            text-align: right;
+        }
+
+        .clear-data-btn {
+            background: none;
+            border: 1px solid #ccc;
+            padding: 6px 14px;
+            font-size: 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            color: #999;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        .clear-data-btn:hover { border-color: #e74c3c; color: #e74c3c; }
+
+        /* Mock contest badge */
+        .mock-badge {
+            display: inline-block;
+            background: #e74c3c;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 700;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            letter-spacing: 0.5px;
+            margin-left: 10px;
+            vertical-align: middle;
         }
 
         @media (max-width: 600px) {
-            .header h1 {
-                font-size: 1.6em;
-            }
-
-            .content {
-                padding: 20px;
-            }
-
-            .char-box {
-                width: 20px;
-                height: 28px;
-                font-size: 12px;
-            }
-
-            .mode-selector {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .mode-btn {
-                text-align: center;
-            }
-
-            .timer-bar {
-                font-size: 1.3em;
-                padding: 10px;
-            }
+            .header h1 { font-size: 1.6em; }
+            .content { padding: 20px; }
+            .char-box { width: 20px; height: 28px; font-size: 12px; }
+            .mode-selector { flex-direction: column; align-items: stretch; }
+            .mode-btn { text-align: center; }
+            .timer-bar { font-size: 1.3em; padding: 10px; }
+            .comparison-row { grid-template-columns: 1fr; }
+            .dashboard-stats { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -524,6 +572,7 @@
             <div class="mode-selector" id="mode-selector">
                 <button class="mode-btn active" onclick="setMode('practice')" id="mode-practice">Practice Mode</button>
                 <button class="mode-btn" onclick="setMode('timed')" id="mode-timed">Timed Mode (30 min)</button>
+                <button class="mode-btn" onclick="setMode('mock')" id="mode-mock">Mock Contest</button>
             </div>
 
             <div id="start-section">
@@ -554,6 +603,7 @@
 
             <div class="feedback-section" id="feedback-section">
                 <div id="feedback-content"></div>
+                <div id="dashboard-container"></div>
                 <div class="try-again-btn">
                     <button class="btn" onclick="resetApp()">Try Another Story</button>
                 </div>
@@ -566,10 +616,10 @@
         <div class="time-up-card">
             <h2>Time's Up!</h2>
             <p>Your 30 minutes have expired.</p>
-            <p style="font-size: 0.95em; color: #999;">You can submit what you have or keep editing without the timer.</p>
+            <p style="font-size: 0.95em; color: #999;" id="time-up-subtext">You can submit what you have or keep editing without the timer.</p>
             <button class="btn" onclick="submitAfterTimeout()" style="margin-top: 20px;">Submit My Headlines</button>
             <br>
-            <button class="btn" onclick="dismissTimeout()" style="margin-top: 10px; background: #6c757d;">Keep Editing (Untimed)</button>
+            <button class="btn" onclick="dismissTimeout()" style="margin-top: 10px; background: #6c757d;" id="keep-editing-btn">Keep Editing (Untimed)</button>
         </div>
     </div>
 
@@ -577,10 +627,10 @@
         let currentStory = null;
         let headlines = [];
 
-        // Feature 2: Timer state
-        let timedMode = false;
+        // Mode state: 'practice', 'timed', or 'mock'
+        let currentMode = 'practice';
         let timerInterval = null;
-        let timeRemaining = 1800; // 30 minutes in seconds
+        let timeRemaining = 1800;
         let timerRunning = false;
 
         const headlineRequirements = [
@@ -628,51 +678,44 @@
             const violations = [];
             if (!text.trim()) return violations;
 
-            // 1. Articles
-            const articleRegex = /\b(a|an|the)\b/gi;
-            let match;
+            var articleRegex = /\b(a|an|the)\b/gi;
+            var match;
             while ((match = articleRegex.exec(text)) !== null) {
                 violations.push({ type: 'article', label: 'Article: "' + match[0] + '"' });
             }
 
-            // 2. Past tense: -ed endings
-            const edRegex = /\b(\w{3,}ed)\b/gi;
+            var edRegex = /\b(\w{3,}ed)\b/gi;
             while ((match = edRegex.exec(text)) !== null) {
-                const word = match[1].toLowerCase();
+                var word = match[1].toLowerCase();
                 if (!NOT_PAST_TENSE.has(word)) {
                     violations.push({ type: 'past-tense', label: 'Past tense? "' + match[1] + '"' });
                 }
             }
 
-            // 3. Past tense: irregular verbs
-            const irregularRegex = new RegExp('\\b(' + Array.from(IRREGULAR_PAST).join('|') + ')\\b', 'gi');
+            var irregularRegex = new RegExp('\\b(' + Array.from(IRREGULAR_PAST).join('|') + ')\\b', 'gi');
             while ((match = irregularRegex.exec(text)) !== null) {
                 violations.push({ type: 'past-tense', label: 'Past tense: "' + match[1] + '"' });
             }
 
-            // 4. Passive voice: be-verb + past participle
-            const passiveRegex = /\b(is|are|was|were|been|being|be)\s+(\w+ed|\w+en)\b/gi;
+            var passiveRegex = /\b(is|are|was|were|been|being|be)\s+(\w+ed|\w+en)\b/gi;
             while ((match = passiveRegex.exec(text)) !== null) {
                 violations.push({ type: 'passive-voice', label: 'Passive: "' + match[0] + '"' });
             }
 
-            // 5. L-words
-            const lWordRegex = /\b(leaguetown|lhs|our\s+school)\b/gi;
+            var lWordRegex = /\b(leaguetown|lhs|our\s+school)\b/gi;
             while ((match = lWordRegex.exec(text)) !== null) {
                 violations.push({ type: 'l-word', label: 'L-word: "' + match[0] + '"' });
             }
 
-            // 6. Punctuation issues
-            const punctRegex = /[?!&]/g;
+            var punctRegex = /[?!&]/g;
             while ((match = punctRegex.exec(text)) !== null) {
-                const labels = { '?': 'Question mark', '!': 'Exclamation mark', '&': 'Ampersand' };
+                var labels = { '?': 'Question mark', '!': 'Exclamation mark', '&': 'Ampersand' };
                 violations.push({ type: 'punctuation', label: labels[match[0]] });
             }
 
-            // 7. First + Last name detection (two consecutive capitalized words)
-            const nameRegex = /\b([A-Z][a-z]+)\s+([A-Z][a-z]+)\b/g;
+            var nameRegex = /\b([A-Z][a-z]+)\s+([A-Z][a-z]+)\b/g;
             while ((match = nameRegex.exec(text)) !== null) {
-                const phrase = match[1] + ' ' + match[2];
+                var phrase = match[1] + ' ' + match[2];
                 if (!COMMON_NON_NAME_PHRASES.has(phrase.toLowerCase())) {
                     violations.push({ type: 'name-issue', label: 'Full name? "' + phrase + '"' });
                 }
@@ -682,16 +725,15 @@
         }
 
         function renderViolations(violations, containerId) {
-            const container = document.getElementById(containerId);
+            var container = document.getElementById(containerId);
             if (!container) return;
             container.innerHTML = '';
 
-            const seen = new Set();
+            var seen = new Set();
             violations.forEach(function(v) {
                 if (seen.has(v.label)) return;
                 seen.add(v.label);
-
-                const tag = document.createElement('span');
+                var tag = document.createElement('span');
                 tag.className = 'violation-tag ' + v.type;
                 tag.textContent = v.label;
                 container.appendChild(tag);
@@ -699,15 +741,16 @@
         }
 
         // =============================================
-        // Feature 2: Timed Practice Mode
+        // Feature 2 & 4: Mode Selection & Timer
         // =============================================
 
         function setMode(mode) {
-            timedMode = (mode === 'timed');
-            document.getElementById('mode-practice').classList.toggle('active', !timedMode);
-            document.getElementById('mode-timed').classList.toggle('active', timedMode);
+            currentMode = mode;
+            document.getElementById('mode-practice').className = 'mode-btn' + (mode === 'practice' ? ' active' : '');
+            document.getElementById('mode-timed').className = 'mode-btn' + (mode === 'timed' ? ' active' : '');
+            document.getElementById('mode-mock').className = 'mode-btn' + (mode === 'mock' ? ' mock-active' : '');
 
-            if (!timedMode && timerRunning) {
+            if (mode === 'practice' && timerRunning) {
                 stopTimer();
                 document.getElementById('timer-bar').className = 'timer-bar';
             }
@@ -717,7 +760,8 @@
             timeRemaining = 1800;
             timerRunning = true;
             var timerBar = document.getElementById('timer-bar');
-            timerBar.className = 'timer-bar visible';
+            var isMock = (currentMode === 'mock');
+            timerBar.className = 'timer-bar visible' + (isMock ? ' mock' : '');
             updateTimerDisplay();
 
             timerInterval = setInterval(function() {
@@ -725,12 +769,13 @@
                 updateTimerDisplay();
 
                 var timerBar = document.getElementById('timer-bar');
+                var base = 'timer-bar visible' + (currentMode === 'mock' ? ' mock' : '');
                 if (timeRemaining <= 60) {
-                    timerBar.className = 'timer-bar visible warning-1';
+                    timerBar.className = base + ' warning-1';
                 } else if (timeRemaining <= 300) {
-                    timerBar.className = 'timer-bar visible warning-5';
+                    timerBar.className = base + ' warning-5';
                 } else if (timeRemaining <= 600) {
-                    timerBar.className = 'timer-bar visible warning-10';
+                    timerBar.className = base + ' warning-10';
                 }
 
                 if (timeRemaining <= 0) {
@@ -743,15 +788,12 @@
         function updateTimerDisplay() {
             var minutes = Math.floor(timeRemaining / 60);
             var seconds = timeRemaining % 60;
-            var display = String(minutes).padStart(2, '0') + ':' + String(seconds).padStart(2, '0');
-            document.getElementById('timer-bar').textContent = display;
+            var label = currentMode === 'mock' ? 'MOCK CONTEST  ' : '';
+            document.getElementById('timer-bar').textContent = label + String(minutes).padStart(2, '0') + ':' + String(seconds).padStart(2, '0');
         }
 
         function stopTimer() {
-            if (timerInterval) {
-                clearInterval(timerInterval);
-                timerInterval = null;
-            }
+            if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
             timerRunning = false;
         }
 
@@ -766,68 +808,187 @@
                 input.style.backgroundColor = '#f5f5f5';
             });
 
+            // In mock mode, no option to keep editing
+            if (currentMode === 'mock') {
+                document.getElementById('keep-editing-btn').style.display = 'none';
+                document.getElementById('time-up-subtext').textContent = 'Contest over! Your headlines will be submitted for scoring.';
+            } else {
+                document.getElementById('keep-editing-btn').style.display = '';
+                document.getElementById('time-up-subtext').textContent = 'You can submit what you have or keep editing without the timer.';
+            }
+
             document.getElementById('time-up-overlay').classList.add('visible');
         }
 
         function submitAfterTimeout() {
             document.getElementById('time-up-overlay').classList.remove('visible');
-
-            // Re-enable inputs briefly for submission to read values
             document.querySelectorAll('.headline-input').forEach(function(input) {
                 input.disabled = false;
                 input.style.opacity = '';
                 input.style.backgroundColor = '';
             });
-
             submitHeadlines(true);
         }
 
         function dismissTimeout() {
             document.getElementById('time-up-overlay').classList.remove('visible');
             document.getElementById('timer-bar').className = 'timer-bar';
-
             document.querySelectorAll('.headline-input').forEach(function(input) {
                 input.disabled = false;
                 input.style.opacity = '';
                 input.style.backgroundColor = '';
             });
-
             setMode('practice');
         }
 
         // =============================================
-        // Core App Functions (with Feature 1 & 2 hooks)
+        // Feature 5: Weakness Dashboard (localStorage)
+        // =============================================
+
+        function loadHistory() {
+            try {
+                var data = localStorage.getItem('uil-headline-history');
+                return data ? JSON.parse(data) : { sessions: [], weaknesses: {} };
+            } catch (e) { return { sessions: [], weaknesses: {} }; }
+        }
+
+        function saveHistory(history) {
+            try { localStorage.setItem('uil-headline-history', JSON.stringify(history)); } catch (e) {}
+        }
+
+        function recordSession(evaluation) {
+            var history = loadHistory();
+
+            // Save session score
+            history.sessions.push({
+                date: new Date().toISOString(),
+                score: evaluation.overallScore,
+                mode: currentMode
+            });
+
+            // Tally improvement categories from each headline
+            evaluation.headlines.forEach(function(hl) {
+                if (hl.improvements && hl.improvements.length > 0) {
+                    hl.improvements.forEach(function(imp) {
+                        var cat = categorizeImprovement(imp);
+                        if (!history.weaknesses[cat]) history.weaknesses[cat] = 0;
+                        history.weaknesses[cat]++;
+                    });
+                }
+            });
+
+            saveHistory(history);
+        }
+
+        function categorizeImprovement(text) {
+            var t = text.toLowerCase();
+            if (t.includes('character count') || t.includes('over count') || t.includes('under count') || t.includes('char')) return 'Character Count';
+            if (t.includes('passive') || t.includes('voice')) return 'Passive Voice';
+            if (t.includes('past tense') || t.includes('tense') || t.includes('-ed')) return 'Past Tense';
+            if (t.includes('article') || t.includes(' a ') || t.includes(' an ') || t.includes(' the ')) return 'Articles';
+            if (t.includes('first name') || t.includes('full name') || t.includes('last name') || t.includes('name')) return 'Name Usage';
+            if (t.includes('main idea') || t.includes('lead') || t.includes('misses')) return 'Missed Main Idea';
+            if (t.includes('word split') || t.includes('split')) return 'Word Splits';
+            if (t.includes('verb') || t.includes('strong')) return 'Weak Verbs';
+            if (t.includes('specific') || t.includes('generic')) return 'Specificity';
+            if (t.includes('l-word') || t.includes('leaguetown') || t.includes('lhs')) return 'L-Words';
+            return 'Other';
+        }
+
+        function renderDashboard() {
+            var history = loadHistory();
+            var container = document.getElementById('dashboard-container');
+
+            if (history.sessions.length === 0) {
+                container.innerHTML = '';
+                return;
+            }
+
+            var totalSessions = history.sessions.length;
+            var avgScore = (history.sessions.reduce(function(sum, s) { return sum + s.score; }, 0) / totalSessions).toFixed(1);
+            var bestScore = Math.max.apply(null, history.sessions.map(function(s) { return s.score; }));
+
+            // Sort weaknesses by count descending
+            var weakEntries = Object.keys(history.weaknesses).map(function(key) {
+                return { cat: key, count: history.weaknesses[key] };
+            }).sort(function(a, b) { return b.count - a.count; });
+
+            var maxCount = weakEntries.length > 0 ? weakEntries[0].count : 1;
+
+            var colors = {
+                'Character Count': '#f44336', 'Passive Voice': '#e91e63', 'Past Tense': '#9c27b0',
+                'Articles': '#673ab7', 'Name Usage': '#3f51b5', 'Missed Main Idea': '#2196f3',
+                'Word Splits': '#00bcd4', 'Weak Verbs': '#009688', 'Specificity': '#4caf50',
+                'L-Words': '#ff9800', 'Other': '#795548'
+            };
+
+            var barsHtml = '';
+            weakEntries.slice(0, 6).forEach(function(entry) {
+                var pct = Math.round((entry.count / maxCount) * 100);
+                var color = colors[entry.cat] || '#667eea';
+                barsHtml +=
+                    '<div class="weakness-bar-container">' +
+                        '<div class="weakness-bar-label">' +
+                            '<span class="cat-name">' + entry.cat + '</span>' +
+                            '<span class="cat-count">' + entry.count + ' time' + (entry.count !== 1 ? 's' : '') + '</span>' +
+                        '</div>' +
+                        '<div class="weakness-bar">' +
+                            '<div class="weakness-bar-fill" style="width: ' + pct + '%; background: ' + color + ';"></div>' +
+                        '</div>' +
+                    '</div>';
+            });
+
+            container.innerHTML =
+                '<div class="dashboard-card">' +
+                    '<div class="dashboard-title">Your Weakness Breakdown</div>' +
+                    '<p style="color: #666; font-size: 0.95em; margin-bottom: 15px;">Based on ' + totalSessions + ' practice session' + (totalSessions !== 1 ? 's' : '') + ' — focus your practice on the top categories.</p>' +
+                    '<div class="dashboard-stats">' +
+                        '<div class="stat-box"><div class="stat-number">' + totalSessions + '</div><div class="stat-label">Sessions</div></div>' +
+                        '<div class="stat-box"><div class="stat-number">' + avgScore + '</div><div class="stat-label">Avg Score /24</div></div>' +
+                        '<div class="stat-box"><div class="stat-number">' + bestScore + '</div><div class="stat-label">Best Score /24</div></div>' +
+                    '</div>' +
+                    (barsHtml ? '<div style="margin-top: 20px;">' + barsHtml + '</div>' : '<p style="color: #999; margin-top: 15px;">No specific weaknesses identified yet.</p>') +
+                    '<div class="dashboard-actions">' +
+                        '<button class="clear-data-btn" onclick="clearHistory()">Clear Practice History</button>' +
+                    '</div>' +
+                '</div>';
+        }
+
+        function clearHistory() {
+            if (confirm('Clear all practice history? This cannot be undone.')) {
+                localStorage.removeItem('uil-headline-history');
+                renderDashboard();
+            }
+        }
+
+        // =============================================
+        // Core App Functions
         // =============================================
 
         async function generateStory() {
-            const startBtn = event.target;
+            var startBtn = event.target;
             startBtn.disabled = true;
             startBtn.textContent = 'Generating story...';
 
             try {
-                const response = await fetch('/api/generate-story', {
+                var response = await fetch('/api/generate-story', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
+                    headers: { 'Content-Type': 'application/json' }
                 });
 
-                const data = await response.json();
+                var data = await response.json();
 
-                if (data.error) {
-                    throw new Error(data.error);
-                }
+                if (data.error) throw new Error(data.error);
 
                 if (data.story) {
                     currentStory = data.story;
                     displayStory();
 
-                    // Feature 2: Start timer if in timed mode
-                    if (timedMode) {
+                    // Start timer for timed or mock modes
+                    if (currentMode === 'timed' || currentMode === 'mock') {
                         startTimer();
                     }
 
-                    // Hide mode selector once story is loaded
                     document.getElementById('mode-selector').style.display = 'none';
                 } else {
                     throw new Error('Failed to parse story');
@@ -845,20 +1006,24 @@
             document.getElementById('story-section').style.display = 'block';
             document.getElementById('story-text').textContent = currentStory;
 
-            const assignmentsDiv = document.getElementById('headline-assignments');
+            // Add mock badge to story title if in mock mode
+            var titleEl = document.getElementById('story-title');
+            titleEl.innerHTML = 'Story' + (currentMode === 'mock' ? ' <span class="mock-badge">MOCK CONTEST</span>' : '');
+
+            var assignmentsDiv = document.getElementById('headline-assignments');
             assignmentsDiv.innerHTML = '';
 
-            headlineRequirements.forEach((req, index) => {
-                const section = document.createElement('div');
+            headlineRequirements.forEach(function(req, index) {
+                var section = document.createElement('div');
                 section.className = 'headline-input-section';
 
-                const label = document.createElement('label');
+                var label = document.createElement('label');
                 label.className = 'headline-label';
-                label.textContent = `Headline ${index + 1} - ${req.lines}-line headline (${req.minCount}-${req.maxCount} characters per line)`;
+                label.textContent = 'Headline ' + (index + 1) + ' - ' + req.lines + '-line headline (' + req.minCount + '-' + req.maxCount + ' characters per line)';
                 section.appendChild(label);
 
-                for (let line = 0; line < req.lines; line++) {
-                    const lineLabel = document.createElement('div');
+                for (var line = 0; line < req.lines; line++) {
+                    var lineLabel = document.createElement('div');
                     lineLabel.style.fontSize = '13px';
                     lineLabel.style.color = '#666';
                     lineLabel.style.marginTop = line > 0 ? '15px' : '10px';
@@ -866,37 +1031,38 @@
                     lineLabel.textContent = req.lines > 1 ? (line === 0 ? 'Main headline:' : 'Secondary headline:') : 'Headline:';
                     section.appendChild(lineLabel);
 
-                    const grid = document.createElement('div');
+                    var grid = document.createElement('div');
                     grid.className = 'character-grid';
-                    grid.id = `grid-${index}-${line}`;
-                    for (let i = 0; i < req.maxCount; i++) {
-                        const box = document.createElement('div');
+                    grid.id = 'grid-' + index + '-' + line;
+                    for (var i = 0; i < req.maxCount; i++) {
+                        var box = document.createElement('div');
                         box.className = 'char-box';
                         box.textContent = String(i + 1);
                         grid.appendChild(box);
                     }
                     section.appendChild(grid);
 
-                    const input = document.createElement('input');
+                    var input = document.createElement('input');
                     input.type = 'text';
                     input.className = 'headline-input';
-                    input.id = `headline-${index}-${line}`;
-                    input.placeholder = `Enter your ${req.lines > 1 && line > 0 ? 'secondary' : 'main'} headline...`;
+                    input.id = 'headline-' + index + '-' + line;
+                    input.placeholder = 'Enter your ' + (req.lines > 1 && line > 0 ? 'secondary' : 'main') + ' headline...';
                     input.setAttribute('data-headline-index', index);
                     input.setAttribute('data-line', line);
                     input.addEventListener('input', updateCharacterCount);
                     section.appendChild(input);
 
-                    const countDiv = document.createElement('div');
+                    var countDiv = document.createElement('div');
                     countDiv.className = 'char-count';
-                    countDiv.id = `count-${index}-${line}`;
-                    countDiv.textContent = `0 / ${req.minCount}-${req.maxCount} characters`;
+                    countDiv.id = 'count-' + index + '-' + line;
+                    countDiv.textContent = '0 / ' + req.minCount + '-' + req.maxCount + ' characters';
                     section.appendChild(countDiv);
 
-                    // Feature 1: Violations container
-                    const violationsDiv = document.createElement('div');
+                    // Feature 1: Violations container (hidden in mock mode)
+                    var violationsDiv = document.createElement('div');
                     violationsDiv.className = 'violations-container';
-                    violationsDiv.id = `violations-${index}-${line}`;
+                    violationsDiv.id = 'violations-' + index + '-' + line;
+                    if (currentMode === 'mock') violationsDiv.style.display = 'none';
                     section.appendChild(violationsDiv);
                 }
 
@@ -905,15 +1071,15 @@
         }
 
         function updateCharacterCount(event) {
-            const input = event.target;
-            const index = input.getAttribute('data-headline-index');
-            const line = input.getAttribute('data-line');
-            const req = headlineRequirements[index];
-            const value = input.value;
-            const count = value.length;
+            var input = event.target;
+            var index = input.getAttribute('data-headline-index');
+            var line = input.getAttribute('data-line');
+            var req = headlineRequirements[index];
+            var value = input.value;
+            var count = value.length;
 
-            const countDiv = document.getElementById(`count-${index}-${line}`);
-            countDiv.textContent = `${count} / ${req.minCount}-${req.maxCount} characters`;
+            var countDiv = document.getElementById('count-' + index + '-' + line);
+            countDiv.textContent = count + ' / ' + req.minCount + '-' + req.maxCount + ' characters';
 
             if (count < req.minCount || count > req.maxCount) {
                 countDiv.classList.add('warning');
@@ -921,9 +1087,9 @@
                 countDiv.classList.remove('warning');
             }
 
-            const grid = document.getElementById(`grid-${index}-${line}`);
-            const boxes = grid.querySelectorAll('.char-box');
-            boxes.forEach((box, i) => {
+            var grid = document.getElementById('grid-' + index + '-' + line);
+            var boxes = grid.querySelectorAll('.char-box');
+            boxes.forEach(function(box, i) {
                 box.classList.remove('filled', 'over-limit');
                 if (i < count) {
                     if (i < req.maxCount) {
@@ -938,28 +1104,25 @@
                 }
             });
 
-            // Feature 1: Check and render violations
-            const violations = checkViolations(value);
-            renderViolations(violations, `violations-${index}-${line}`);
+            // Feature 1: Check and render violations (not in mock mode)
+            if (currentMode !== 'mock') {
+                var violations = checkViolations(value);
+                renderViolations(violations, 'violations-' + index + '-' + line);
+            }
         }
 
         async function submitHeadlines(skipValidation) {
-            // Feature 2: Stop timer on submit
             stopTimer();
 
             headlines = [];
-            let allValid = true;
+            var allValid = true;
 
-            headlineRequirements.forEach((req, index) => {
-                const headlineLines = [];
-                for (let line = 0; line < req.lines; line++) {
-                    const input = document.getElementById(`headline-${index}-${line}`);
-                    const value = input.value.trim();
-
-                    if (!value) {
-                        allValid = false;
-                    }
-
+            headlineRequirements.forEach(function(req, index) {
+                var headlineLines = [];
+                for (var line = 0; line < req.lines; line++) {
+                    var input = document.getElementById('headline-' + index + '-' + line);
+                    var value = input.value.trim();
+                    if (!value) allValid = false;
                     headlineLines.push({
                         text: value,
                         charCount: value.length,
@@ -967,7 +1130,6 @@
                         maxRequired: req.maxCount
                     });
                 }
-
                 headlines.push({
                     headlineNumber: index + 1,
                     lines: headlineLines,
@@ -996,22 +1158,17 @@
 
         async function evaluateHeadlines() {
             try {
-                const response = await fetch('/api/evaluate-headlines', {
+                var response = await fetch('/api/evaluate-headlines', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        story: currentStory,
-                        headlines: headlines
-                    })
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ story: currentStory, headlines: headlines })
                 });
 
-                const data = await response.json();
+                var data = await response.json();
+                if (data.error) throw new Error(data.error);
 
-                if (data.error) {
-                    throw new Error(data.error);
-                }
+                // Feature 5: Record session before displaying
+                recordSession(data);
 
                 displayFeedback(data);
             } catch (error) {
@@ -1024,86 +1181,94 @@
             document.getElementById('loading').style.display = 'none';
             document.getElementById('feedback-section').style.display = 'block';
 
-            const feedbackDiv = document.getElementById('feedback-content');
+            var feedbackDiv = document.getElementById('feedback-content');
             feedbackDiv.innerHTML = '';
 
-            // Overall score
-            const overallCard = document.createElement('div');
+            // Overall score card
+            var overallCard = document.createElement('div');
             overallCard.className = 'feedback-card';
 
-            const scoreClass = evaluation.overallScore >= 20 ? 'excellent' :
-                              evaluation.overallScore >= 15 ? 'good' :
-                              evaluation.overallScore >= 10 ? 'fair' : 'needs-work';
+            var scoreClass = evaluation.overallScore >= 20 ? 'excellent' :
+                            evaluation.overallScore >= 15 ? 'good' :
+                            evaluation.overallScore >= 10 ? 'fair' : 'needs-work';
 
-            overallCard.innerHTML = `
-                <div class="feedback-headline">Overall Performance</div>
-                <div class="score ${scoreClass}">Score: ${evaluation.overallScore}/24</div>
-                <div class="feedback-text">${evaluation.overallFeedback}</div>
-            `;
+            overallCard.innerHTML =
+                '<div class="feedback-headline">Overall Performance' +
+                (currentMode === 'mock' ? ' <span class="mock-badge">MOCK CONTEST</span>' : '') +
+                '</div>' +
+                '<div class="score ' + scoreClass + '">Score: ' + evaluation.overallScore + '/24</div>' +
+                '<div class="feedback-text">' + evaluation.overallFeedback + '</div>';
             feedbackDiv.appendChild(overallCard);
 
             // Individual headline feedback
-            evaluation.headlines.forEach((hl, index) => {
-                const card = document.createElement('div');
+            evaluation.headlines.forEach(function(hl, index) {
+                var card = document.createElement('div');
                 card.className = 'feedback-card';
 
-                const studentHeadline = headlines[index].lines.map(l => l.text).join('<br>');
+                var studentHeadline = headlines[index].lines.map(function(l) { return l.text; }).join('<br>');
 
-                const scoreClass = hl.score === 4 ? 'excellent' :
-                                  hl.score === 3 ? 'good' :
-                                  hl.score === 2 || hl.score === 1 ? 'fair' : 'needs-work';
+                var scoreClass = hl.score === 4 ? 'excellent' :
+                                hl.score === 3 ? 'good' :
+                                hl.score === 2 || hl.score === 1 ? 'fair' : 'needs-work';
 
-                let html = `
-                    <div class="feedback-headline">Headline ${hl.number}</div>
-                    <div class="your-headline">${studentHeadline}</div>
-                    <div class="score ${scoreClass}">Score: ${hl.score}/4</div>
-                `;
+                var html =
+                    '<div class="feedback-headline">Headline ' + hl.number + '</div>' +
+                    '<div class="score ' + scoreClass + '">Score: ' + hl.score + '/4</div>';
+
+                // Feature 6: Side-by-Side Comparison
+                if (hl.suggestedRevision) {
+                    html +=
+                        '<div class="comparison-row">' +
+                            '<div class="comparison-col yours">' +
+                                '<div class="comparison-label">Your Headline</div>' +
+                                studentHeadline +
+                            '</div>' +
+                            '<div class="comparison-col suggested">' +
+                                '<div class="comparison-label">Suggested Revision</div>' +
+                                hl.suggestedRevision +
+                            '</div>' +
+                        '</div>';
+                } else {
+                    html += '<div class="your-headline">' + studentHeadline + '</div>';
+                }
 
                 if (hl.strengths && hl.strengths.length > 0) {
-                    html += `
-                        <div class="strength">
-                            <strong>Strengths:</strong>
-                            <ul class="feedback-list">
-                                ${hl.strengths.map(s => `<li>${s}</li>`).join('')}
-                            </ul>
-                        </div>
-                    `;
+                    html +=
+                        '<div class="strength">' +
+                            '<strong>Strengths:</strong>' +
+                            '<ul class="feedback-list">' +
+                                hl.strengths.map(function(s) { return '<li>' + s + '</li>'; }).join('') +
+                            '</ul>' +
+                        '</div>';
                 }
 
                 if (hl.improvements && hl.improvements.length > 0) {
-                    html += `
-                        <div class="improvement">
-                            <strong>Areas for Improvement:</strong>
-                            <ul class="feedback-list">
-                                ${hl.improvements.map(i => `<li>${i}</li>`).join('')}
-                            </ul>
-                        </div>
-                    `;
+                    html +=
+                        '<div class="improvement">' +
+                            '<strong>Areas for Improvement:</strong>' +
+                            '<ul class="feedback-list">' +
+                                hl.improvements.map(function(i) { return '<li>' + i + '</li>'; }).join('') +
+                            '</ul>' +
+                        '</div>';
                 }
 
-                if (hl.suggestedRevision) {
-                    html += `
-                        <div class="feedback-text">
-                            <strong>Suggested revision:</strong><br>
-                            <div class="your-headline" style="margin-top: 10px;">${hl.suggestedRevision}</div>
-                        </div>
-                    `;
-                }
-
-                html += `<div class="feedback-text" style="margin-top: 15px;">${hl.feedback}</div>`;
+                html += '<div class="feedback-text" style="margin-top: 15px;">' + hl.feedback + '</div>';
 
                 card.innerHTML = html;
                 feedbackDiv.appendChild(card);
             });
+
+            // Feature 5: Render weakness dashboard
+            renderDashboard();
         }
 
         function resetApp() {
-            // Feature 2: Reset timer
             stopTimer();
             timeRemaining = 1800;
             document.getElementById('timer-bar').className = 'timer-bar';
             document.getElementById('time-up-overlay').classList.remove('visible');
             document.getElementById('mode-selector').style.display = 'flex';
+            document.getElementById('dashboard-container').innerHTML = '';
 
             document.getElementById('feedback-section').style.display = 'none';
             document.getElementById('start-section').style.display = 'block';
@@ -1111,7 +1276,7 @@
             currentStory = null;
             headlines = [];
 
-            const startBtn = document.querySelector('#start-section button');
+            var startBtn = document.querySelector('#start-section button');
             startBtn.disabled = false;
             startBtn.textContent = 'Generate New Story';
         }
