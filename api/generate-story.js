@@ -35,16 +35,36 @@ export default async function handler(req, res) {
         max_tokens: 1000,
         messages: [{
           role: 'user',
-          content: `Generate a realistic high school news story for UIL Headline Writing practice. The story should be 150-250 words, include 2-3 direct quotes from students/teachers/administrators, and cover a newsworthy school event, program, or achievement. Make it sound like actual student journalism.
+          content: `You are writing a practice story for the UIL (University Interscholastic League) Headline Writing contest in Texas. Generate ONE news story that students will write headlines for.
 
-Topics can include: academic achievements, new programs/classes, school events, student activities, awards, community service, sports achievements, arts performances, fundraisers, policy changes, etc.
+CRITICAL FORMAT REQUIREMENTS (based on real UIL tests):
+- The story is for the "Leaguetown Press," the student newspaper of Leaguetown High School
+- Story should be 150-300 words
+- Include 2-4 direct quotes from named sources (students, teachers, administrators, community members) with first AND last names plus their title/grade
+- The LEAD (first 1-2 paragraphs) must contain the main news — this is what headlines should capture
+- Later paragraphs add detail, quotes, and context
+- Use realistic high school journalism tone — factual, not flowery
+- Include specific details: dates, numbers, dollar amounts, locations, names
+- Stories should feel like they belong in a real Texas high school newspaper
+
+TOPIC VARIETY (pick one at random):
+- New school programs/classes (AI class, culinary program, automotive tech, chamber orchestra)
+- Student clubs and organizations (politics club, grief club, garden club, creative writing club)
+- Community service projects (food drives, cheer clinics for charity, free lunches for summer)
+- Competitions and achievements (Science Olympics, film festival, baking contest, fencing championship)
+- School events (prom theme voting, pickle fair, open mic night, food truck festival, taste testing)
+- Policy changes (cell phone policy, dress code, attendance incentives, longer school day, bus route cuts)
+- Fundraisers (Country Gala, yoga classes for trip money, project graduation)
+- Donations and partnerships (solar panels, auto parts donation, bird-safe windows)
+- Unique human interest stories (superintendent skydiving bet, student DJ, counselor wins pie contest)
+- School improvements (new facilities, technology upgrades, garden projects, composting)
+
+DO NOT use generic stories. Make each story unique, specific, and interesting — the kind of story that would appear in a real UIL contest.
 
 Format the response as JSON:
 {
-  "story": "the full story text with quotes"
-}
-
-Make it engaging and appropriate for high school students to practice headline writing.`
+  "story": "the full story text"
+}`
         }]
       })
     });

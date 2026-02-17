@@ -29,10 +29,12 @@ export default async function handler(req, res) {
   }
 
   const headlinesText = headlines.map((h, i) => {
-    const lines = h.lines.map((l, lineIndex) => 
-      `  Line ${lineIndex + 1}: "${l.text}" (${l.charCount} chars, required: ${l.minRequired}-${l.maxRequired})`
-    ).join('\n');
-    return `Headline ${h.headlineNumber} (${h.totalLines}-line):\n${lines}`;
+    const lines = h.lines.map((l, lineIndex) => {
+      const role = l.role ? ` [${l.role}]` : '';
+      return `  Line ${lineIndex + 1}${role}: "${l.text}" (${l.charCount} chars, required: ${l.minRequired}-${l.maxRequired})`;
+    }).join('\n');
+    const typeLabel = h.type === 'main+secondary' ? 'main + secondary' : h.totalLines + '-line';
+    return `Headline ${h.headlineNumber} (${typeLabel}) — Assignment: ${h.label || ''}:\n${lines}`;
   }).join('\n\n');
 
   try {
@@ -117,10 +119,23 @@ CRITICAL RULES TO ENFORCE:
 9. Facts must match story exactly
 10. Use LAST names only (not first, not both)
 
-NOTES: 
+ADDITIONAL RULES (from official UIL contest tips):
+- Avoid starting the headline with a verb
+- Use single quotes, NOT double quotes
+- Avoid using the same word twice in a headline
+- Avoid unfamiliar abbreviations
+- Do not end the headline with a period or exclamation point
+- A comma (,) can substitute for the word "and"
+- Present perfect tense is also acceptable (e.g., "has earned")
+- For main+secondary headline format: the main headline grabs attention (can be a pun, wordplay, or short phrase — does NOT need a verb when a secondary headline follows). The secondary headline provides the factual details with subject + verb + object.
+- Match the tone: fun story = fun headline, serious story = serious headline
+- Do not sacrifice accuracy for creativity or cuteness
+
+NOTES:
 - Block letters acceptable (no penalty)
 - Use % sign, not word
 - Single-digit numbers as words or digits (be consistent, don't BEGIN headline with digit)
+- Upstyle OR downstyle capitalization are both acceptable
 
 For each headline, provide:
 - Score (0-4 using rubric above)

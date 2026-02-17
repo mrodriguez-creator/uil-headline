@@ -822,13 +822,15 @@
         let timeRemaining = 1800;
         let timerRunning = false;
 
+        // Real UIL format: 6 stories with different headline assignments
+        // Based on actual UIL Invitational, District, Regional and State tests
         const headlineRequirements = [
-            { lines: 1, minCount: 24, maxCount: 30 },
-            { lines: 2, minCount: 24, maxCount: 30 },
-            { lines: 3, minCount: 20, maxCount: 26 },
-            { lines: 1, minCount: 10, maxCount: 16 },
-            { lines: 2, minCount: 20, maxCount: 26 },
-            { lines: 1, minCount: 24, maxCount: 30 }
+            { type: 'single', lines: 1, minCount: 24, maxCount: 30, label: '1-line headline counting 24-30' },
+            { type: 'single', lines: 2, minCount: 22, maxCount: 28, label: '2-line headline with each line counting 22-28' },
+            { type: 'single', lines: 3, minCount: 16, maxCount: 22, label: '3-line headline with each line counting 16-22' },
+            { type: 'main+secondary', mainLines: 1, mainMin: 8, mainMax: 14, secLines: 2, secMin: 20, secMax: 26, label: '1-line main headline counting 8-14 and 2-line secondary headline with each line counting 20-26' },
+            { type: 'main+secondary', mainLines: 1, mainMin: 6, mainMax: 12, secLines: 1, secMin: 22, secMax: 28, label: '1-line main headline counting 6-12 and a 1-line secondary headline counting 22-28' },
+            { type: 'single', lines: 1, minCount: 24, maxCount: 30, label: '1-line headline counting 24-30' }
         ];
 
         // =============================================
@@ -1404,69 +1406,91 @@
 
                 var label = document.createElement('label');
                 label.className = 'headline-label';
-                label.textContent = 'Headline ' + (index + 1) + ' - ' + req.lines + '-line headline (' + req.minCount + '-' + req.maxCount + ' characters per line)';
+                label.textContent = 'Headline ' + (index + 1) + ' — ' + req.label;
                 section.appendChild(label);
 
-                for (var line = 0; line < req.lines; line++) {
-                    var lineLabel = document.createElement('div');
-                    lineLabel.style.fontSize = '13px';
-                    lineLabel.style.color = '#666';
-                    lineLabel.style.marginTop = line > 0 ? '15px' : '10px';
-                    lineLabel.style.marginBottom = '8px';
-                    lineLabel.textContent = req.lines > 1 ? (line === 0 ? 'Main headline:' : 'Secondary headline:') : 'Headline:';
-                    section.appendChild(lineLabel);
-
-                    var grid = document.createElement('div');
-                    grid.className = 'character-grid';
-                    grid.id = 'grid-' + index + '-' + line;
-                    for (var i = 0; i < req.maxCount; i++) {
-                        var box = document.createElement('div');
-                        box.className = 'char-box';
-                        box.textContent = String(i + 1);
-                        grid.appendChild(box);
+                if (req.type === 'main+secondary') {
+                    // Main headline lines
+                    var totalLines = req.mainLines + req.secLines;
+                    for (var mLine = 0; mLine < req.mainLines; mLine++) {
+                        buildLineInput(section, index, mLine, req.mainMin, req.mainMax, 'Main headline:', 'main headline');
                     }
-                    section.appendChild(grid);
-
-                    var input = document.createElement('input');
-                    input.type = 'text';
-                    input.className = 'headline-input';
-                    input.id = 'headline-' + index + '-' + line;
-                    input.placeholder = 'Enter your ' + (req.lines > 1 && line > 0 ? 'secondary' : 'main') + ' headline...';
-                    input.setAttribute('data-headline-index', index);
-                    input.setAttribute('data-line', line);
-                    input.addEventListener('input', updateCharacterCount);
-                    section.appendChild(input);
-
-                    var countDiv = document.createElement('div');
-                    countDiv.className = 'char-count';
-                    countDiv.id = 'count-' + index + '-' + line;
-                    countDiv.textContent = '0 / ' + req.minCount + '-' + req.maxCount + ' characters';
-                    section.appendChild(countDiv);
-
-                    // Feature 1: Violations container (hidden in mock mode)
-                    var violationsDiv = document.createElement('div');
-                    violationsDiv.className = 'violations-container';
-                    violationsDiv.id = 'violations-' + index + '-' + line;
-                    if (currentMode === 'mock') violationsDiv.style.display = 'none';
-                    section.appendChild(violationsDiv);
+                    // Secondary headline lines
+                    for (var sLine = 0; sLine < req.secLines; sLine++) {
+                        var lineIdx = req.mainLines + sLine;
+                        buildLineInput(section, index, lineIdx, req.secMin, req.secMax, 'Secondary headline' + (req.secLines > 1 ? ' line ' + (sLine + 1) + ':' : ':'), 'secondary headline');
+                    }
+                } else {
+                    // Standard single/multi-line headline
+                    for (var line = 0; line < req.lines; line++) {
+                        var lineLabel = req.lines === 1 ? 'Headline:' : (line === 0 ? 'Line 1:' : 'Line ' + (line + 1) + ':');
+                        buildLineInput(section, index, line, req.minCount, req.maxCount, lineLabel, 'line ' + (line + 1));
+                    }
                 }
 
                 assignmentsDiv.appendChild(section);
             });
         }
 
+        function buildLineInput(section, index, lineNum, minCount, maxCount, labelText, placeholder) {
+            var lineLabel = document.createElement('div');
+            lineLabel.style.fontSize = '13px';
+            lineLabel.style.color = '#666';
+            lineLabel.style.marginTop = lineNum > 0 ? '15px' : '10px';
+            lineLabel.style.marginBottom = '8px';
+            lineLabel.textContent = labelText;
+            section.appendChild(lineLabel);
+
+            var grid = document.createElement('div');
+            grid.className = 'character-grid';
+            grid.id = 'grid-' + index + '-' + lineNum;
+            for (var i = 0; i < maxCount; i++) {
+                var box = document.createElement('div');
+                box.className = 'char-box';
+                box.textContent = String(i + 1);
+                grid.appendChild(box);
+            }
+            section.appendChild(grid);
+
+            var input = document.createElement('input');
+            input.type = 'text';
+            input.className = 'headline-input';
+            input.id = 'headline-' + index + '-' + lineNum;
+            input.placeholder = 'Enter your ' + placeholder + '...';
+            input.setAttribute('data-headline-index', index);
+            input.setAttribute('data-line', lineNum);
+            input.setAttribute('data-min', minCount);
+            input.setAttribute('data-max', maxCount);
+            input.addEventListener('input', updateCharacterCount);
+            section.appendChild(input);
+
+            var countDiv = document.createElement('div');
+            countDiv.className = 'char-count';
+            countDiv.id = 'count-' + index + '-' + lineNum;
+            countDiv.textContent = '0 / ' + minCount + '-' + maxCount + ' characters';
+            section.appendChild(countDiv);
+
+            // Feature 1: Violations container (hidden in mock mode)
+            var violationsDiv = document.createElement('div');
+            violationsDiv.className = 'violations-container';
+            violationsDiv.id = 'violations-' + index + '-' + lineNum;
+            if (currentMode === 'mock') violationsDiv.style.display = 'none';
+            section.appendChild(violationsDiv);
+        }
+
         function updateCharacterCount(event) {
             var input = event.target;
             var index = input.getAttribute('data-headline-index');
             var line = input.getAttribute('data-line');
-            var req = headlineRequirements[index];
+            var minCount = parseInt(input.getAttribute('data-min'));
+            var maxCount = parseInt(input.getAttribute('data-max'));
             var value = input.value;
             var count = value.length;
 
             var countDiv = document.getElementById('count-' + index + '-' + line);
-            countDiv.textContent = count + ' / ' + req.minCount + '-' + req.maxCount + ' characters';
+            countDiv.textContent = count + ' / ' + minCount + '-' + maxCount + ' characters';
 
-            if (count < req.minCount || count > req.maxCount) {
+            if (count < minCount || count > maxCount) {
                 countDiv.classList.add('warning');
             } else {
                 countDiv.classList.remove('warning');
@@ -1477,7 +1501,7 @@
             boxes.forEach(function(box, i) {
                 box.classList.remove('filled', 'over-limit');
                 if (i < count) {
-                    if (i < req.maxCount) {
+                    if (i < maxCount) {
                         box.classList.add('filled');
                         box.textContent = value[i];
                     } else {
@@ -1504,21 +1528,37 @@
 
             headlineRequirements.forEach(function(req, index) {
                 var headlineLines = [];
-                for (var line = 0; line < req.lines; line++) {
-                    var input = document.getElementById('headline-' + index + '-' + line);
-                    var value = input.value.trim();
-                    if (!value) allValid = false;
-                    headlineLines.push({
-                        text: value,
-                        charCount: value.length,
-                        minRequired: req.minCount,
-                        maxRequired: req.maxCount
-                    });
+                var totalLines;
+                if (req.type === 'main+secondary') {
+                    totalLines = req.mainLines + req.secLines;
+                    for (var m = 0; m < req.mainLines; m++) {
+                        var input = document.getElementById('headline-' + index + '-' + m);
+                        var value = input.value.trim();
+                        if (!value) allValid = false;
+                        headlineLines.push({ text: value, charCount: value.length, minRequired: req.mainMin, maxRequired: req.mainMax, role: 'main' });
+                    }
+                    for (var s = 0; s < req.secLines; s++) {
+                        var lineIdx = req.mainLines + s;
+                        var input2 = document.getElementById('headline-' + index + '-' + lineIdx);
+                        var value2 = input2.value.trim();
+                        if (!value2) allValid = false;
+                        headlineLines.push({ text: value2, charCount: value2.length, minRequired: req.secMin, maxRequired: req.secMax, role: 'secondary' });
+                    }
+                } else {
+                    totalLines = req.lines;
+                    for (var line = 0; line < req.lines; line++) {
+                        var input3 = document.getElementById('headline-' + index + '-' + line);
+                        var value3 = input3.value.trim();
+                        if (!value3) allValid = false;
+                        headlineLines.push({ text: value3, charCount: value3.length, minRequired: req.minCount, maxRequired: req.maxCount });
+                    }
                 }
                 headlines.push({
                     headlineNumber: index + 1,
                     lines: headlineLines,
-                    totalLines: req.lines
+                    totalLines: totalLines,
+                    type: req.type || 'single',
+                    label: req.label
                 });
             });
 
