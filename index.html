@@ -302,11 +302,180 @@
             color: #1976d2;
         }
 
+        /* --- Feature 1: Rule Violation Highlighting --- */
+        .violations-container {
+            margin-top: 6px;
+            min-height: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
+        .violation-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        .violation-tag.article {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffc107;
+        }
+
+        .violation-tag.past-tense {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .violation-tag.passive-voice {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .violation-tag.l-word {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .violation-tag.punctuation {
+            background: #cce5ff;
+            color: #004085;
+            border: 1px solid #b8daff;
+        }
+
+        .violation-tag.name-issue {
+            background: #e2d5f1;
+            color: #4a235a;
+            border: 1px solid #d2b4de;
+        }
+
+        /* --- Feature 2: Timed Practice Mode --- */
+        .mode-selector {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin: 20px 0 10px;
+        }
+
+        .mode-btn {
+            padding: 10px 24px;
+            border: 2px solid #667eea;
+            border-radius: 6px;
+            background: white;
+            color: #667eea;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: Georgia, serif;
+            transition: all 0.2s;
+        }
+
+        .mode-btn:hover {
+            background: #f0f0ff;
+        }
+
+        .mode-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .timer-bar {
+            display: none;
+            background: #1e3c72;
+            color: white;
+            text-align: center;
+            padding: 12px 20px;
+            font-size: 1.6em;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 2px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .timer-bar.visible {
+            display: block;
+        }
+
+        .timer-bar.warning-10 {
+            background: #e67e22;
+        }
+
+        .timer-bar.warning-5 {
+            background: #e74c3c;
+            animation: pulse 1s ease-in-out infinite;
+        }
+
+        .timer-bar.warning-1 {
+            background: #c0392b;
+            animation: pulse 0.5s ease-in-out infinite;
+        }
+
+        .timer-bar.expired {
+            background: #7f8c8d;
+            animation: none;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .time-up-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 200;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .time-up-overlay.visible {
+            display: flex;
+        }
+
+        .time-up-card {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            text-align: center;
+            max-width: 500px;
+            margin: 20px;
+        }
+
+        .time-up-card h2 {
+            font-size: 2em;
+            color: #e74c3c;
+            margin-bottom: 15px;
+        }
+
+        .time-up-card p {
+            color: #666;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+
         @media (max-width: 600px) {
             .header h1 {
                 font-size: 1.6em;
             }
-            
+
             .content {
                 padding: 20px;
             }
@@ -316,13 +485,29 @@
                 height: 28px;
                 font-size: 12px;
             }
+
+            .mode-selector {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .mode-btn {
+                text-align: center;
+            }
+
+            .timer-bar {
+                font-size: 1.3em;
+                padding: 10px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <div class="timer-bar" id="timer-bar">30:00</div>
+
         <div class="header">
-            <h1>🏆 UIL Headline Writing Trainer</h1>
+            <h1>UIL Headline Writing Trainer</h1>
             <p>Practice writing headlines with AI-powered feedback</p>
         </div>
 
@@ -330,8 +515,15 @@
             <div class="info-box">
                 <strong>How it works:</strong> You'll receive a randomly generated news story. Write headlines following UIL rules, then get detailed AI feedback to improve your skills!
                 <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #2196f3;">
-                    <strong>📚 New to UIL Headline Writing?</strong> <a href="tutorial.html" style="color: #1976d2; text-decoration: underline;">Start with our beginner tutorial →</a>
+                    <strong>New to UIL Headline Writing?</strong> <a href="tutorial.html" style="color: #1976d2; text-decoration: underline;">Start with our beginner tutorial</a>
+                    <span style="margin: 0 8px; color: #999;">|</span>
+                    <strong>Target Your Weaknesses:</strong> <a href="drills.html" style="color: #1976d2; text-decoration: underline;">Try skill drills</a>
                 </div>
+            </div>
+
+            <div class="mode-selector" id="mode-selector">
+                <button class="mode-btn active" onclick="setMode('practice')" id="mode-practice">Practice Mode</button>
+                <button class="mode-btn" onclick="setMode('timed')" id="mode-timed">Timed Mode (30 min)</button>
             </div>
 
             <div id="start-section">
@@ -369,9 +561,27 @@
         </div>
     </div>
 
+    <!-- Time's Up Overlay -->
+    <div class="time-up-overlay" id="time-up-overlay">
+        <div class="time-up-card">
+            <h2>Time's Up!</h2>
+            <p>Your 30 minutes have expired.</p>
+            <p style="font-size: 0.95em; color: #999;">You can submit what you have or keep editing without the timer.</p>
+            <button class="btn" onclick="submitAfterTimeout()" style="margin-top: 20px;">Submit My Headlines</button>
+            <br>
+            <button class="btn" onclick="dismissTimeout()" style="margin-top: 10px; background: #6c757d;">Keep Editing (Untimed)</button>
+        </div>
+    </div>
+
     <script>
         let currentStory = null;
         let headlines = [];
+
+        // Feature 2: Timer state
+        let timedMode = false;
+        let timerInterval = null;
+        let timeRemaining = 1800; // 30 minutes in seconds
+        let timerRunning = false;
 
         const headlineRequirements = [
             { lines: 1, minCount: 24, maxCount: 30 },
@@ -381,6 +591,213 @@
             { lines: 2, minCount: 20, maxCount: 26 },
             { lines: 1, minCount: 24, maxCount: 30 }
         ];
+
+        // =============================================
+        // Feature 1: Rule Violation Detection
+        // =============================================
+
+        const IRREGULAR_PAST = new Set([
+            'won', 'said', 'told', 'went', 'came', 'made', 'took',
+            'gave', 'found', 'knew', 'thought', 'got', 'saw', 'ran',
+            'began', 'left', 'brought', 'held', 'wrote', 'stood',
+            'lost', 'paid', 'met', 'spent', 'built', 'sent',
+            'fell', 'felt', 'kept', 'became', 'grew', 'drew', 'broke',
+            'spoke', 'chose', 'rose', 'drove', 'rode', 'wore', 'flew',
+            'sang', 'swam', 'threw', 'caught', 'taught', 'fought',
+            'bought', 'led', 'was', 'were', 'had', 'did'
+        ]);
+
+        const NOT_PAST_TENSE = new Set([
+            'bed', 'red', 'fed', 'shed', 'sled', 'wed',
+            'hundred', 'sacred', 'wicked', 'naked', 'speed',
+            'need', 'seed', 'feed', 'freed', 'breed', 'agreed',
+            'guaranteed', 'proceed', 'succeed', 'indeed'
+        ]);
+
+        const COMMON_NON_NAME_PHRASES = new Set([
+            'new york', 'high school', 'student council', 'national honor',
+            'honor society', 'spring break', 'fall semester', 'summer camp',
+            'state championship', 'school board', 'school district',
+            'middle school', 'junior varsity', 'varsity football',
+            'north texas', 'south texas', 'east texas', 'west texas',
+            'red cross', 'boy scouts', 'girl scouts', 'united states',
+            'first place', 'second place', 'third place'
+        ]);
+
+        function checkViolations(text) {
+            const violations = [];
+            if (!text.trim()) return violations;
+
+            // 1. Articles
+            const articleRegex = /\b(a|an|the)\b/gi;
+            let match;
+            while ((match = articleRegex.exec(text)) !== null) {
+                violations.push({ type: 'article', label: 'Article: "' + match[0] + '"' });
+            }
+
+            // 2. Past tense: -ed endings
+            const edRegex = /\b(\w{3,}ed)\b/gi;
+            while ((match = edRegex.exec(text)) !== null) {
+                const word = match[1].toLowerCase();
+                if (!NOT_PAST_TENSE.has(word)) {
+                    violations.push({ type: 'past-tense', label: 'Past tense? "' + match[1] + '"' });
+                }
+            }
+
+            // 3. Past tense: irregular verbs
+            const irregularRegex = new RegExp('\\b(' + Array.from(IRREGULAR_PAST).join('|') + ')\\b', 'gi');
+            while ((match = irregularRegex.exec(text)) !== null) {
+                violations.push({ type: 'past-tense', label: 'Past tense: "' + match[1] + '"' });
+            }
+
+            // 4. Passive voice: be-verb + past participle
+            const passiveRegex = /\b(is|are|was|were|been|being|be)\s+(\w+ed|\w+en)\b/gi;
+            while ((match = passiveRegex.exec(text)) !== null) {
+                violations.push({ type: 'passive-voice', label: 'Passive: "' + match[0] + '"' });
+            }
+
+            // 5. L-words
+            const lWordRegex = /\b(leaguetown|lhs|our\s+school)\b/gi;
+            while ((match = lWordRegex.exec(text)) !== null) {
+                violations.push({ type: 'l-word', label: 'L-word: "' + match[0] + '"' });
+            }
+
+            // 6. Punctuation issues
+            const punctRegex = /[?!&]/g;
+            while ((match = punctRegex.exec(text)) !== null) {
+                const labels = { '?': 'Question mark', '!': 'Exclamation mark', '&': 'Ampersand' };
+                violations.push({ type: 'punctuation', label: labels[match[0]] });
+            }
+
+            // 7. First + Last name detection (two consecutive capitalized words)
+            const nameRegex = /\b([A-Z][a-z]+)\s+([A-Z][a-z]+)\b/g;
+            while ((match = nameRegex.exec(text)) !== null) {
+                const phrase = match[1] + ' ' + match[2];
+                if (!COMMON_NON_NAME_PHRASES.has(phrase.toLowerCase())) {
+                    violations.push({ type: 'name-issue', label: 'Full name? "' + phrase + '"' });
+                }
+            }
+
+            return violations;
+        }
+
+        function renderViolations(violations, containerId) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            container.innerHTML = '';
+
+            const seen = new Set();
+            violations.forEach(function(v) {
+                if (seen.has(v.label)) return;
+                seen.add(v.label);
+
+                const tag = document.createElement('span');
+                tag.className = 'violation-tag ' + v.type;
+                tag.textContent = v.label;
+                container.appendChild(tag);
+            });
+        }
+
+        // =============================================
+        // Feature 2: Timed Practice Mode
+        // =============================================
+
+        function setMode(mode) {
+            timedMode = (mode === 'timed');
+            document.getElementById('mode-practice').classList.toggle('active', !timedMode);
+            document.getElementById('mode-timed').classList.toggle('active', timedMode);
+
+            if (!timedMode && timerRunning) {
+                stopTimer();
+                document.getElementById('timer-bar').className = 'timer-bar';
+            }
+        }
+
+        function startTimer() {
+            timeRemaining = 1800;
+            timerRunning = true;
+            var timerBar = document.getElementById('timer-bar');
+            timerBar.className = 'timer-bar visible';
+            updateTimerDisplay();
+
+            timerInterval = setInterval(function() {
+                timeRemaining--;
+                updateTimerDisplay();
+
+                var timerBar = document.getElementById('timer-bar');
+                if (timeRemaining <= 60) {
+                    timerBar.className = 'timer-bar visible warning-1';
+                } else if (timeRemaining <= 300) {
+                    timerBar.className = 'timer-bar visible warning-5';
+                } else if (timeRemaining <= 600) {
+                    timerBar.className = 'timer-bar visible warning-10';
+                }
+
+                if (timeRemaining <= 0) {
+                    stopTimer();
+                    handleTimeExpired();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            var minutes = Math.floor(timeRemaining / 60);
+            var seconds = timeRemaining % 60;
+            var display = String(minutes).padStart(2, '0') + ':' + String(seconds).padStart(2, '0');
+            document.getElementById('timer-bar').textContent = display;
+        }
+
+        function stopTimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+            timerRunning = false;
+        }
+
+        function handleTimeExpired() {
+            var timerBar = document.getElementById('timer-bar');
+            timerBar.className = 'timer-bar visible expired';
+            timerBar.textContent = "TIME'S UP";
+
+            document.querySelectorAll('.headline-input').forEach(function(input) {
+                input.disabled = true;
+                input.style.opacity = '0.7';
+                input.style.backgroundColor = '#f5f5f5';
+            });
+
+            document.getElementById('time-up-overlay').classList.add('visible');
+        }
+
+        function submitAfterTimeout() {
+            document.getElementById('time-up-overlay').classList.remove('visible');
+
+            // Re-enable inputs briefly for submission to read values
+            document.querySelectorAll('.headline-input').forEach(function(input) {
+                input.disabled = false;
+                input.style.opacity = '';
+                input.style.backgroundColor = '';
+            });
+
+            submitHeadlines(true);
+        }
+
+        function dismissTimeout() {
+            document.getElementById('time-up-overlay').classList.remove('visible');
+            document.getElementById('timer-bar').className = 'timer-bar';
+
+            document.querySelectorAll('.headline-input').forEach(function(input) {
+                input.disabled = false;
+                input.style.opacity = '';
+                input.style.backgroundColor = '';
+            });
+
+            setMode('practice');
+        }
+
+        // =============================================
+        // Core App Functions (with Feature 1 & 2 hooks)
+        // =============================================
 
         async function generateStory() {
             const startBtn = event.target;
@@ -396,14 +813,22 @@
                 });
 
                 const data = await response.json();
-                
+
                 if (data.error) {
                     throw new Error(data.error);
                 }
-                
+
                 if (data.story) {
                     currentStory = data.story;
                     displayStory();
+
+                    // Feature 2: Start timer if in timed mode
+                    if (timedMode) {
+                        startTimer();
+                    }
+
+                    // Hide mode selector once story is loaded
+                    document.getElementById('mode-selector').style.display = 'none';
                 } else {
                     throw new Error('Failed to parse story');
                 }
@@ -426,7 +851,7 @@
             headlineRequirements.forEach((req, index) => {
                 const section = document.createElement('div');
                 section.className = 'headline-input-section';
-                
+
                 const label = document.createElement('label');
                 label.className = 'headline-label';
                 label.textContent = `Headline ${index + 1} - ${req.lines}-line headline (${req.minCount}-${req.maxCount} characters per line)`;
@@ -467,6 +892,12 @@
                     countDiv.id = `count-${index}-${line}`;
                     countDiv.textContent = `0 / ${req.minCount}-${req.maxCount} characters`;
                     section.appendChild(countDiv);
+
+                    // Feature 1: Violations container
+                    const violationsDiv = document.createElement('div');
+                    violationsDiv.className = 'violations-container';
+                    violationsDiv.id = `violations-${index}-${line}`;
+                    section.appendChild(violationsDiv);
                 }
 
                 assignmentsDiv.appendChild(section);
@@ -483,7 +914,7 @@
 
             const countDiv = document.getElementById(`count-${index}-${line}`);
             countDiv.textContent = `${count} / ${req.minCount}-${req.maxCount} characters`;
-            
+
             if (count < req.minCount || count > req.maxCount) {
                 countDiv.classList.add('warning');
             } else {
@@ -506,9 +937,16 @@
                     box.textContent = String(i + 1);
                 }
             });
+
+            // Feature 1: Check and render violations
+            const violations = checkViolations(value);
+            renderViolations(violations, `violations-${index}-${line}`);
         }
 
-        async function submitHeadlines() {
+        async function submitHeadlines(skipValidation) {
+            // Feature 2: Stop timer on submit
+            stopTimer();
+
             headlines = [];
             let allValid = true;
 
@@ -517,11 +955,11 @@
                 for (let line = 0; line < req.lines; line++) {
                     const input = document.getElementById(`headline-${index}-${line}`);
                     const value = input.value.trim();
-                    
+
                     if (!value) {
                         allValid = false;
                     }
-                    
+
                     headlineLines.push({
                         text: value,
                         charCount: value.length,
@@ -529,7 +967,7 @@
                         maxRequired: req.maxCount
                     });
                 }
-                
+
                 headlines.push({
                     headlineNumber: index + 1,
                     lines: headlineLines,
@@ -537,7 +975,7 @@
                 });
             });
 
-            if (!allValid) {
+            if (!allValid && !skipValidation) {
                 alert('Please fill in all headline fields before submitting.');
                 return;
             }
@@ -570,11 +1008,11 @@
                 });
 
                 const data = await response.json();
-                
+
                 if (data.error) {
                     throw new Error(data.error);
                 }
-                
+
                 displayFeedback(data);
             } catch (error) {
                 console.error('Error:', error);
@@ -592,11 +1030,11 @@
             // Overall score
             const overallCard = document.createElement('div');
             overallCard.className = 'feedback-card';
-            
+
             const scoreClass = evaluation.overallScore >= 20 ? 'excellent' :
                               evaluation.overallScore >= 15 ? 'good' :
                               evaluation.overallScore >= 10 ? 'fair' : 'needs-work';
-            
+
             overallCard.innerHTML = `
                 <div class="feedback-headline">Overall Performance</div>
                 <div class="score ${scoreClass}">Score: ${evaluation.overallScore}/24</div>
@@ -610,7 +1048,7 @@
                 card.className = 'feedback-card';
 
                 const studentHeadline = headlines[index].lines.map(l => l.text).join('<br>');
-                
+
                 const scoreClass = hl.score === 4 ? 'excellent' :
                                   hl.score === 3 ? 'good' :
                                   hl.score === 2 || hl.score === 1 ? 'fair' : 'needs-work';
@@ -624,7 +1062,7 @@
                 if (hl.strengths && hl.strengths.length > 0) {
                     html += `
                         <div class="strength">
-                            <strong>✓ Strengths:</strong>
+                            <strong>Strengths:</strong>
                             <ul class="feedback-list">
                                 ${hl.strengths.map(s => `<li>${s}</li>`).join('')}
                             </ul>
@@ -635,7 +1073,7 @@
                 if (hl.improvements && hl.improvements.length > 0) {
                     html += `
                         <div class="improvement">
-                            <strong>⚠ Areas for Improvement:</strong>
+                            <strong>Areas for Improvement:</strong>
                             <ul class="feedback-list">
                                 ${hl.improvements.map(i => `<li>${i}</li>`).join('')}
                             </ul>
@@ -646,7 +1084,7 @@
                 if (hl.suggestedRevision) {
                     html += `
                         <div class="feedback-text">
-                            <strong>💡 Suggested revision:</strong><br>
+                            <strong>Suggested revision:</strong><br>
                             <div class="your-headline" style="margin-top: 10px;">${hl.suggestedRevision}</div>
                         </div>
                     `;
@@ -660,12 +1098,19 @@
         }
 
         function resetApp() {
+            // Feature 2: Reset timer
+            stopTimer();
+            timeRemaining = 1800;
+            document.getElementById('timer-bar').className = 'timer-bar';
+            document.getElementById('time-up-overlay').classList.remove('visible');
+            document.getElementById('mode-selector').style.display = 'flex';
+
             document.getElementById('feedback-section').style.display = 'none';
             document.getElementById('start-section').style.display = 'block';
             document.getElementById('submit-btn').disabled = false;
             currentStory = null;
             headlines = [];
-            
+
             const startBtn = document.querySelector('#start-section button');
             startBtn.disabled = false;
             startBtn.textContent = 'Generate New Story';

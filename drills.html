@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UIL Headline Writing - Skill Drills</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-weight: 600;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 4px 12px rgba(108, 117, 125, 0.4);
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .info-box strong {
+            color: #1976d2;
+        }
+
+        .info-box a {
+            color: #1976d2;
+            text-decoration: underline;
+        }
+
+        /* Drill Menu Grid */
+        .drill-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 16px;
+            margin: 20px 0;
+        }
+
+        .drill-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 24px 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .drill-card:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102,126,234,0.2);
+        }
+
+        .drill-card h3 {
+            color: #1e3c72;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+
+        .drill-card p {
+            color: #666;
+            font-size: 0.95em;
+            line-height: 1.4;
+        }
+
+        .drill-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+            display: block;
+            color: #667eea;
+            font-weight: bold;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        /* Active Drill Area */
+        .drill-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .drill-header h2 {
+            color: #1e3c72;
+            margin: 0;
+        }
+
+        .drill-prompt {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+            font-size: 1.15em;
+            line-height: 1.6;
+        }
+
+        .drill-input {
+            width: 100%;
+            padding: 14px;
+            font-size: 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-family: Georgia, serif;
+            margin: 15px 0;
+        }
+
+        .drill-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .drill-input:disabled {
+            opacity: 0.7;
+            background: #f5f5f5;
+        }
+
+        .drill-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .drill-feedback {
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            font-weight: 600;
+            line-height: 1.5;
+        }
+
+        .drill-feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .drill-feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .drill-feedback.partial {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffc107;
+        }
+
+        .drill-progress {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 15px 0;
+            font-size: 0.95em;
+            color: #666;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+
+        .drill-score {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .drill-score h2 {
+            color: #1e3c72;
+            margin-bottom: 20px;
+        }
+
+        .score-number {
+            font-size: 3em;
+            color: #667eea;
+            font-weight: bold;
+            display: block;
+            margin: 10px 0;
+        }
+
+        .score-pct {
+            font-size: 1.2em;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .score-message {
+            color: #444;
+            font-size: 1.05em;
+            margin: 15px 0 25px;
+            line-height: 1.5;
+        }
+
+        .score-actions {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .hint-box {
+            display: none;
+            margin-top: 10px;
+            padding: 12px;
+            background: #e3f2fd;
+            border-radius: 6px;
+            color: #1976d2;
+            font-size: 0.95em;
+        }
+
+        .hint-box.visible {
+            display: block;
+        }
+
+        .instructions-text {
+            margin: 15px 0;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.6em;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .drill-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .drill-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .score-number {
+                font-size: 2.2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>UIL Headline Skill Drills</h1>
+            <p>Target individual skills with quick focused exercises</p>
+        </div>
+
+        <div class="content">
+            <!-- Drill Menu -->
+            <div id="drill-menu">
+                <div class="info-box">
+                    <strong>Skill Drills:</strong> Target individual UIL headline writing skills with quick exercises. No timer, no API calls - just focused practice with instant feedback.
+                    <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #2196f3;">
+                        <a href="index.html">Back to full practice</a>
+                        <span style="margin: 0 8px; color: #999;">|</span>
+                        <a href="tutorial.html">Review the rules</a>
+                    </div>
+                </div>
+
+                <div class="drill-grid">
+                    <div class="drill-card" onclick="startDrill('active-voice')">
+                        <span class="drill-icon">AV</span>
+                        <h3>Active Voice Drill</h3>
+                        <p>Rewrite passive sentences in active voice</p>
+                    </div>
+                    <div class="drill-card" onclick="startDrill('tense')">
+                        <span class="drill-icon">VT</span>
+                        <h3>Tense Conversion</h3>
+                        <p>Convert past tense headlines to present tense</p>
+                    </div>
+                    <div class="drill-card" onclick="startDrill('articles')">
+                        <span class="drill-icon">A/An</span>
+                        <h3>Article Removal</h3>
+                        <p>Remove articles while keeping meaning clear</p>
+                    </div>
+                    <div class="drill-card" onclick="startDrill('char-count')">
+                        <span class="drill-icon">#</span>
+                        <h3>Character Count</h3>
+                        <p>Estimate headline character counts accurately</p>
+                    </div>
+                    <div class="drill-card" onclick="startDrill('verbs')">
+                        <span class="drill-icon">VB</span>
+                        <h3>Verb Strength</h3>
+                        <p>Replace weak verbs with strong alternatives</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active Drill Area -->
+            <div id="drill-active" style="display: none;"></div>
+        </div>
+    </div>
+
+    <script>
+        // =============================================
+        // Drill Data Banks
+        // =============================================
+
+        const drillData = {
+            'active-voice': {
+                title: 'Active Voice Drill',
+                instructions: 'Rewrite this passive headline in active voice. Keep it concise and in present tense.',
+                exercises: [
+                    {
+                        prompt: 'Award is given to senior',
+                        acceptable: ['senior receives award', 'senior earns award', 'senior wins award', 'senior claims award', 'senior gets award'],
+                        hint: 'Who is doing the action? Make them the subject.'
+                    },
+                    {
+                        prompt: 'New policy was approved by board',
+                        acceptable: ['board approves new policy', 'board adopts new policy', 'board passes new policy', 'board approves policy'],
+                        hint: 'The board performed the action. Put them first.'
+                    },
+                    {
+                        prompt: 'Funds were raised by students',
+                        acceptable: ['students raise funds', 'students collect funds', 'students gather funds'],
+                        hint: 'Students performed the action of raising funds.'
+                    },
+                    {
+                        prompt: 'Scholarship is awarded to junior',
+                        acceptable: ['junior earns scholarship', 'junior wins scholarship', 'junior receives scholarship', 'junior claims scholarship'],
+                        hint: 'The junior is the one receiving. Make them the subject with an active verb.'
+                    },
+                    {
+                        prompt: 'Concert is organized by choir',
+                        acceptable: ['choir organizes concert', 'choir hosts concert', 'choir plans concert', 'choir stages concert'],
+                        hint: 'The choir is doing the organizing. Put them first.'
+                    },
+                    {
+                        prompt: 'Record was broken by swimmer',
+                        acceptable: ['swimmer breaks record', 'swimmer shatters record', 'swimmer tops record', 'swimmer sets record'],
+                        hint: 'The swimmer performed the action.'
+                    },
+                    {
+                        prompt: 'Grant is received by science department',
+                        acceptable: ['science department receives grant', 'science department earns grant', 'science department wins grant', 'science department lands grant'],
+                        hint: 'Who received the grant? Make them the subject.'
+                    },
+                    {
+                        prompt: 'Mural was painted by art students',
+                        acceptable: ['art students paint mural', 'students paint mural', 'art students create mural'],
+                        hint: 'The art students did the painting.'
+                    },
+                    {
+                        prompt: 'Donation is made by local business',
+                        acceptable: ['local business donates', 'business donates', 'local business makes donation', 'business gives donation'],
+                        hint: 'The business is performing the action.'
+                    },
+                    {
+                        prompt: 'Trophy was earned by debate team',
+                        acceptable: ['debate team earns trophy', 'debate team wins trophy', 'debate team claims trophy', 'debate team captures trophy'],
+                        hint: 'The debate team did the earning.'
+                    },
+                    {
+                        prompt: 'Ceremony is hosted by principal',
+                        acceptable: ['principal hosts ceremony', 'principal leads ceremony', 'principal organizes ceremony'],
+                        hint: 'The principal is hosting. Put them as the subject.'
+                    },
+                    {
+                        prompt: 'Laptops were distributed to freshmen',
+                        acceptable: ['freshmen receive laptops', 'school distributes laptops', 'district distributes laptops'],
+                        hint: 'Think about who receives or who distributes.'
+                    }
+                ],
+                check: function(answer, exercise) {
+                    var norm = answer.trim().toLowerCase().replace(/[^a-z0-9\s]/g, '');
+                    var hasPassive = /\b(is|are|was|were|been|being)\s+\w+/.test(norm);
+                    var exactMatch = exercise.acceptable.some(function(a) { return norm === a.toLowerCase(); });
+                    if (exactMatch) return { result: 'correct', message: 'Excellent! Perfect active voice.' };
+                    if (!hasPassive && norm.length > 3) return { result: 'partial', message: 'Good active voice! A model answer: "' + exercise.acceptable[0] + '"' };
+                    return { result: 'incorrect', message: 'Still passive voice. Try: "' + exercise.acceptable[0] + '"' };
+                }
+            },
+
+            'tense': {
+                title: 'Tense Conversion Drill',
+                instructions: 'Convert this past-tense headline to present tense. Keep the same meaning.',
+                exercises: [
+                    {
+                        prompt: 'Team won championship',
+                        acceptable: ['team wins championship', 'team captures championship', 'team claims championship'],
+                        hint: 'What is the present tense of "won"? wins, captures, claims...'
+                    },
+                    {
+                        prompt: 'Board approved new budget',
+                        acceptable: ['board approves new budget', 'board adopts new budget', 'board passes new budget'],
+                        hint: 'Change "approved" to its present form: approves.'
+                    },
+                    {
+                        prompt: 'Students raised record funds',
+                        acceptable: ['students raise record funds', 'students collect record funds'],
+                        hint: '"Raised" becomes "raise" in present tense.'
+                    },
+                    {
+                        prompt: 'Principal announced new program',
+                        acceptable: ['principal announces new program', 'principal reveals new program', 'principal unveils new program'],
+                        hint: '"Announced" becomes "announces."'
+                    },
+                    {
+                        prompt: 'Club hosted annual fundraiser',
+                        acceptable: ['club hosts annual fundraiser', 'club holds annual fundraiser', 'club stages annual fundraiser'],
+                        hint: '"Hosted" becomes "hosts."'
+                    },
+                    {
+                        prompt: 'Senior earned full scholarship',
+                        acceptable: ['senior earns full scholarship', 'senior wins full scholarship', 'senior receives full scholarship'],
+                        hint: '"Earned" becomes "earns."'
+                    },
+                    {
+                        prompt: 'District hired new coach',
+                        acceptable: ['district hires new coach', 'district names new coach', 'district adds new coach'],
+                        hint: '"Hired" becomes "hires."'
+                    },
+                    {
+                        prompt: 'Band won state competition',
+                        acceptable: ['band wins state competition', 'band captures state competition', 'band claims state competition', 'band takes state competition'],
+                        hint: '"Won" becomes "wins."'
+                    },
+                    {
+                        prompt: 'Council voted on dress code',
+                        acceptable: ['council votes on dress code', 'council decides dress code', 'council approves dress code'],
+                        hint: '"Voted" becomes "votes."'
+                    },
+                    {
+                        prompt: 'Teacher received national award',
+                        acceptable: ['teacher receives national award', 'teacher earns national award', 'teacher wins national award'],
+                        hint: '"Received" becomes "receives."'
+                    },
+                    {
+                        prompt: 'School opened new wing',
+                        acceptable: ['school opens new wing', 'school unveils new wing', 'school debuts new wing'],
+                        hint: '"Opened" becomes "opens."'
+                    },
+                    {
+                        prompt: 'Athletes broke three records',
+                        acceptable: ['athletes break three records', 'athletes shatter three records', 'athletes set three records'],
+                        hint: '"Broke" becomes "break."'
+                    }
+                ],
+                check: function(answer, exercise) {
+                    var norm = answer.trim().toLowerCase().replace(/[^a-z0-9\s]/g, '');
+                    var irregularPast = /\b(won|said|told|went|came|made|took|gave|found|knew|thought|got|saw|ran|began|left|brought|held|wrote|stood|lost|paid|met|spent|built|sent|fell|felt|kept|became|grew|drew|broke|spoke|chose|rose|drove|rode|wore|flew|sang|swam|threw|caught|taught|fought|bought|led|was|were|had|did)\b/;
+                    var hasPast = /\b\w{3,}ed\b/.test(norm) || irregularPast.test(norm);
+                    var exactMatch = exercise.acceptable.some(function(a) { return norm === a.toLowerCase(); });
+                    if (exactMatch) return { result: 'correct', message: 'Perfect present tense!' };
+                    if (!hasPast && norm.length > 3) return { result: 'partial', message: 'Good tense conversion! Model answer: "' + exercise.acceptable[0] + '"' };
+                    return { result: 'incorrect', message: 'Still contains past tense. Try: "' + exercise.acceptable[0] + '"' };
+                }
+            },
+
+            'articles': {
+                title: 'Article Removal Drill',
+                instructions: 'Remove all articles (a, an, the) from this headline. Keep everything else intact.',
+                exercises: [
+                    {
+                        prompt: 'The board adopts a new policy',
+                        acceptable: ['board adopts new policy'],
+                        hint: 'Remove "the" and "a" — the sentence still works!'
+                    },
+                    {
+                        prompt: 'A student wins the science award',
+                        acceptable: ['student wins science award'],
+                        hint: 'Both "a" and "the" should be removed.'
+                    },
+                    {
+                        prompt: 'The team captures a state title',
+                        acceptable: ['team captures state title'],
+                        hint: 'Remove both articles.'
+                    },
+                    {
+                        prompt: 'An athlete earns a scholarship',
+                        acceptable: ['athlete earns scholarship'],
+                        hint: 'Remove "an" and "a."'
+                    },
+                    {
+                        prompt: 'The principal announces the new program',
+                        acceptable: ['principal announces new program'],
+                        hint: 'Remove both instances of "the."'
+                    },
+                    {
+                        prompt: 'A fundraiser raises the most money',
+                        acceptable: ['fundraiser raises most money'],
+                        hint: 'Remove "a" and "the."'
+                    },
+                    {
+                        prompt: 'The choir wins an award at the festival',
+                        acceptable: ['choir wins award at festival'],
+                        hint: 'Remove "the," "an," and "the."'
+                    },
+                    {
+                        prompt: 'A new coach leads the basketball team',
+                        acceptable: ['new coach leads basketball team'],
+                        hint: 'Remove "a" and "the."'
+                    },
+                    {
+                        prompt: 'The district approves a budget increase',
+                        acceptable: ['district approves budget increase'],
+                        hint: 'Remove "the" and "a."'
+                    },
+                    {
+                        prompt: 'An honor student receives the top award',
+                        acceptable: ['honor student receives top award'],
+                        hint: 'Remove "an" and "the."'
+                    },
+                    {
+                        prompt: 'The school hosts a community event',
+                        acceptable: ['school hosts community event'],
+                        hint: 'Remove "the" and "a."'
+                    },
+                    {
+                        prompt: 'A senior leads the robotics club to a win',
+                        acceptable: ['senior leads robotics club to win'],
+                        hint: 'Remove all three articles: "a," "the," and "a."'
+                    }
+                ],
+                check: function(answer, exercise) {
+                    var norm = answer.trim().toLowerCase();
+                    var hasArticles = /\b(a|an|the)\b/i.test(norm);
+                    var exactMatch = exercise.acceptable.some(function(a) { return norm === a.toLowerCase(); });
+                    if (exactMatch) return { result: 'correct', message: 'Perfect! All articles removed.' };
+                    if (!hasArticles && norm.length > 3) return { result: 'partial', message: 'No articles — good! Model answer: "' + exercise.acceptable[0] + '"' };
+                    return { result: 'incorrect', message: 'Still has articles. Try: "' + exercise.acceptable[0] + '"' };
+                }
+            },
+
+            'char-count': {
+                title: 'Character Count Estimation',
+                instructions: 'Look at the headline below and estimate the exact character count (including spaces). Type just a number.',
+                exercises: [
+                    { prompt: 'Board adopts new policy', answer: 22, hint: 'Count each letter and space carefully.' },
+                    { prompt: 'Students raise record funds', answer: 27, hint: 'Don\'t forget to count spaces between words.' },
+                    { prompt: 'Team wins state title', answer: 20, hint: 'Count every character including spaces.' },
+                    { prompt: 'Senior earns scholarship', answer: 24, hint: 'Try counting word by word: Senior(6) + space(1) + earns(5)...' },
+                    { prompt: 'Choir captures first place', answer: 25, hint: 'Each space counts as one character.' },
+                    { prompt: 'District hires new coach', answer: 23, hint: 'Count letter by letter.' },
+                    { prompt: 'Band qualifies for state', answer: 24, hint: 'Remember: spaces count!' },
+                    { prompt: 'Council votes on budget', answer: 22, hint: 'Count each word length plus the spaces.' },
+                    { prompt: 'Club hosts fundraiser', answer: 20, hint: 'Three words plus two spaces.' },
+                    { prompt: 'Robotics team advances', answer: 22, hint: 'R-o-b-o-t-i-c-s(8) + space(1) + t-e-a-m(4)...' },
+                    { prompt: 'Principal unveils plan', answer: 21, hint: 'Count carefully: Principal(9) + space + unveils(7) + space + plan(4).' },
+                    { prompt: 'Athletes break records at meet', answer: 30, hint: 'Five words means four spaces. Count each word.' }
+                ],
+                check: function(answer, exercise) {
+                    var guess = parseInt(answer.trim());
+                    if (isNaN(guess)) return { result: 'incorrect', message: 'Please enter a number.' };
+                    var diff = Math.abs(guess - exercise.answer);
+                    if (diff === 0) return { result: 'correct', message: 'Exactly right! "' + exercise.prompt + '" is ' + exercise.answer + ' characters.' };
+                    if (diff <= 2) return { result: 'partial', message: 'Close! Off by ' + diff + '. "' + exercise.prompt + '" is ' + exercise.answer + ' characters.' };
+                    return { result: 'incorrect', message: 'Off by ' + diff + '. "' + exercise.prompt + '" is ' + exercise.answer + ' characters. Count each letter and space.' };
+                }
+            },
+
+            'verbs': {
+                title: 'Verb Strength Drill',
+                instructions: 'Replace the weak/generic verb in this headline with a stronger, more specific verb. Keep the same structure.',
+                exercises: [
+                    {
+                        prompt: 'Team gets championship',
+                        acceptable: ['team captures championship', 'team wins championship', 'team claims championship', 'team earns championship', 'team seizes championship'],
+                        weakVerb: 'gets',
+                        hint: 'What is a stronger word for "gets" in a sports context? captures, wins, claims...'
+                    },
+                    {
+                        prompt: 'School has new program',
+                        acceptable: ['school launches new program', 'school introduces new program', 'school debuts new program', 'school unveils new program', 'school starts new program', 'school adds new program'],
+                        weakVerb: 'has',
+                        hint: 'What action did the school take? launches, introduces, debuts...'
+                    },
+                    {
+                        prompt: 'Board makes budget changes',
+                        acceptable: ['board approves budget changes', 'board adopts budget changes', 'board passes budget changes', 'board enacts budget changes'],
+                        weakVerb: 'makes',
+                        hint: 'What specifically did the board do? approves, adopts, enacts...'
+                    },
+                    {
+                        prompt: 'Students do community service',
+                        acceptable: ['students perform community service', 'students complete community service', 'students tackle community service', 'students lead community service'],
+                        weakVerb: 'do',
+                        hint: 'A stronger verb than "do": perform, complete, tackle...'
+                    },
+                    {
+                        prompt: 'Club puts on annual show',
+                        acceptable: ['club hosts annual show', 'club stages annual show', 'club presents annual show', 'club performs annual show'],
+                        weakVerb: 'puts on',
+                        hint: '"Puts on" can be replaced with: hosts, stages, presents...'
+                    },
+                    {
+                        prompt: 'Coach goes to hall of fame',
+                        acceptable: ['coach enters hall of fame', 'coach joins hall of fame', 'coach reaches hall of fame'],
+                        weakVerb: 'goes to',
+                        hint: '"Goes to" can become: enters, joins, reaches...'
+                    },
+                    {
+                        prompt: 'District gives teachers raises',
+                        acceptable: ['district awards teachers raises', 'district grants teachers raises', 'district approves teacher raises'],
+                        weakVerb: 'gives',
+                        hint: '"Gives" can become: awards, grants, approves...'
+                    },
+                    {
+                        prompt: 'Senior gets full ride',
+                        acceptable: ['senior earns full ride', 'senior wins full ride', 'senior lands full ride', 'senior secures full ride', 'senior claims full ride'],
+                        weakVerb: 'gets',
+                        hint: '"Gets" in an achievement context: earns, wins, lands, secures...'
+                    },
+                    {
+                        prompt: 'Band does well at contest',
+                        acceptable: ['band excels at contest', 'band shines at contest', 'band dominates contest', 'band triumphs at contest'],
+                        weakVerb: 'does well',
+                        hint: '"Does well" can become: excels, shines, dominates, triumphs...'
+                    },
+                    {
+                        prompt: 'Teacher is given top honor',
+                        acceptable: ['teacher earns top honor', 'teacher receives top honor', 'teacher wins top honor', 'teacher claims top honor'],
+                        weakVerb: 'is given',
+                        hint: 'This is also passive voice! Make it active: earns, receives, wins...'
+                    },
+                    {
+                        prompt: 'School says no to dress code',
+                        acceptable: ['school rejects dress code', 'school blocks dress code', 'school scraps dress code', 'school drops dress code', 'school nixes dress code'],
+                        weakVerb: 'says no to',
+                        hint: '"Says no to" can become: rejects, blocks, scraps, nixes...'
+                    },
+                    {
+                        prompt: 'Team has best season ever',
+                        acceptable: ['team posts best season ever', 'team records best season ever', 'team achieves best season ever', 'team enjoys best season ever'],
+                        weakVerb: 'has',
+                        hint: '"Has" in a records context: posts, records, achieves...'
+                    }
+                ],
+                check: function(answer, exercise) {
+                    var norm = answer.trim().toLowerCase().replace(/[^a-z0-9\s]/g, '');
+                    var hasWeak = norm.includes(exercise.weakVerb.toLowerCase());
+                    var exactMatch = exercise.acceptable.some(function(a) { return norm === a.toLowerCase(); });
+                    if (exactMatch) return { result: 'correct', message: 'Excellent verb choice!' };
+                    if (!hasWeak && norm.length > 3) return { result: 'partial', message: 'Good replacement! Some strong options: "' + exercise.acceptable.slice(0, 3).join('", "') + '"' };
+                    return { result: 'incorrect', message: 'Still using "' + exercise.weakVerb + '". Try: "' + exercise.acceptable[0] + '"' };
+                }
+            }
+        };
+
+        // =============================================
+        // Drill Engine
+        // =============================================
+
+        var currentDrill = null;
+        var currentDrillKey = null;
+        var exercises = [];
+        var drillIndex = 0;
+        var drillScore = 0;
+        var drillTotal = 0;
+
+        function shuffleArray(arr) {
+            var shuffled = arr.slice();
+            for (var i = shuffled.length - 1; i > 0; i--) {
+                var j = Math.floor(Math.random() * (i + 1));
+                var temp = shuffled[i];
+                shuffled[i] = shuffled[j];
+                shuffled[j] = temp;
+            }
+            return shuffled;
+        }
+
+        function startDrill(drillType) {
+            currentDrill = drillData[drillType];
+            currentDrillKey = drillType;
+            exercises = shuffleArray(currentDrill.exercises);
+            drillIndex = 0;
+            drillScore = 0;
+            drillTotal = exercises.length;
+
+            document.getElementById('drill-menu').style.display = 'none';
+            document.getElementById('drill-active').style.display = 'block';
+
+            showExercise();
+        }
+
+        function showExercise() {
+            var exercise = exercises[drillIndex];
+            var activeDiv = document.getElementById('drill-active');
+            var progressPct = Math.round((drillIndex / drillTotal) * 100);
+
+            activeDiv.innerHTML =
+                '<div class="drill-header">' +
+                    '<h2>' + currentDrill.title + '</h2>' +
+                    '<button class="btn btn-secondary" onclick="exitDrill()" style="padding: 8px 16px; font-size: 14px;">Exit Drill</button>' +
+                '</div>' +
+                '<div class="drill-progress">' +
+                    '<span>Question ' + (drillIndex + 1) + ' of ' + drillTotal + '</span>' +
+                    '<div class="progress-bar">' +
+                        '<div class="progress-fill" style="width: ' + progressPct + '%"></div>' +
+                    '</div>' +
+                    '<span>Score: ' + drillScore + '/' + drillIndex + '</span>' +
+                '</div>' +
+                '<p class="instructions-text">' + currentDrill.instructions + '</p>' +
+                '<div class="drill-prompt">' + exercise.prompt + '</div>' +
+                '<input type="text" class="drill-input" id="drill-answer" placeholder="Type your answer..." onkeydown="if(event.key===\'Enter\') checkDrillAnswer()">' +
+                '<div class="drill-actions">' +
+                    '<button class="btn" onclick="checkDrillAnswer()" id="check-btn">Check Answer</button>' +
+                    '<button class="btn btn-secondary" onclick="showHint()" style="padding: 10px 20px;">Hint</button>' +
+                '</div>' +
+                '<div id="drill-feedback-area"></div>' +
+                '<div class="hint-box" id="hint-area"></div>';
+
+            document.getElementById('drill-answer').focus();
+        }
+
+        function checkDrillAnswer() {
+            var answerInput = document.getElementById('drill-answer');
+            var answer = answerInput.value;
+            if (!answer.trim()) return;
+
+            var exercise = exercises[drillIndex];
+            var result = currentDrill.check(answer, exercise);
+
+            if (result.result === 'correct') drillScore++;
+            else if (result.result === 'partial') drillScore += 0.5;
+
+            var feedbackArea = document.getElementById('drill-feedback-area');
+            feedbackArea.innerHTML =
+                '<div class="drill-feedback ' + result.result + '">' + result.message + '</div>' +
+                '<button class="btn" onclick="nextExercise()" style="margin-top: 10px;">' +
+                    (drillIndex < drillTotal - 1 ? 'Next Question' : 'See Results') +
+                '</button>';
+
+            answerInput.disabled = true;
+            document.getElementById('check-btn').disabled = true;
+        }
+
+        function showHint() {
+            var exercise = exercises[drillIndex];
+            if (exercise.hint) {
+                var hintArea = document.getElementById('hint-area');
+                hintArea.classList.add('visible');
+                hintArea.textContent = exercise.hint;
+            }
+        }
+
+        function nextExercise() {
+            drillIndex++;
+            if (drillIndex >= drillTotal) {
+                showDrillResults();
+            } else {
+                showExercise();
+            }
+        }
+
+        function showDrillResults() {
+            var pct = Math.round((drillScore / drillTotal) * 100);
+            var activeDiv = document.getElementById('drill-active');
+
+            var message;
+            if (pct >= 90) message = 'Outstanding! You have mastered this skill.';
+            else if (pct >= 70) message = 'Good work! A bit more practice and you will nail it.';
+            else if (pct >= 50) message = 'Decent start. Review the rules and try again.';
+            else message = 'This skill needs more work. Check the tutorial and try again.';
+
+            activeDiv.innerHTML =
+                '<div class="drill-score">' +
+                    '<h2>' + currentDrill.title + ' — Results</h2>' +
+                    '<span class="score-number">' + drillScore + '/' + drillTotal + '</span>' +
+                    '<p class="score-pct">' + pct + '% correct</p>' +
+                    '<p class="score-message">' + message + '</p>' +
+                    '<div class="score-actions">' +
+                        '<button class="btn" onclick="startDrill(\'' + currentDrillKey + '\')">Try Again</button>' +
+                        '<button class="btn btn-secondary" onclick="exitDrill()">Back to Drills</button>' +
+                    '</div>' +
+                '</div>';
+        }
+
+        function exitDrill() {
+            document.getElementById('drill-active').style.display = 'none';
+            document.getElementById('drill-active').innerHTML = '';
+            document.getElementById('drill-menu').style.display = 'block';
+            currentDrill = null;
+            currentDrillKey = null;
+        }
+    </script>
+</body>
+</html>
