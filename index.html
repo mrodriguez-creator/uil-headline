@@ -1092,6 +1092,8 @@
             var edRegex = /\b(\w{3,}ed)\b/gi;
             while ((match = edRegex.exec(text)) !== null) {
                 var word = match[1].toLowerCase();
+                // Skip all-caps words — they are abbreviations (LED, FRED, etc.)
+                if (match[1] === match[1].toUpperCase()) continue;
                 if (!NOT_PAST_TENSE.has(word)) {
                     violations.push({ type: 'past-tense', label: 'Past tense? "' + match[1] + '"' });
                 }
@@ -1099,11 +1101,15 @@
 
             var irregularRegex = new RegExp('\\b(' + Array.from(IRREGULAR_PAST).join('|') + ')\\b', 'gi');
             while ((match = irregularRegex.exec(text)) !== null) {
+                // Skip all-caps words — they are abbreviations (LED, WON, etc.)
+                if (match[1] === match[1].toUpperCase()) continue;
                 violations.push({ type: 'past-tense', label: 'Past tense: "' + match[1] + '"' });
             }
 
             var passiveRegex = /\b(is|are|was|were|been|being|be)\s+(\w+ed|\w+en)\b/gi;
             while ((match = passiveRegex.exec(text)) !== null) {
+                // Skip if the second word is all-caps (abbreviation)
+                if (match[2] === match[2].toUpperCase()) continue;
                 violations.push({ type: 'passive-voice', label: 'Passive: "' + match[0] + '"' });
             }
 
