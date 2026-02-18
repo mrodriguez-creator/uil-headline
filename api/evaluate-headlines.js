@@ -22,19 +22,21 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'API key not configured' });
   }
 
-  const { story, headlines } = req.body;
+  const { stories, headlines } = req.body;
 
-  if (!story || !headlines) {
-    return res.status(400).json({ error: 'Missing story or headlines' });
+  if (!stories || !headlines) {
+    return res.status(400).json({ error: 'Missing stories or headlines' });
   }
 
-  const headlinesText = headlines.map((h, i) => {
+  // Build the prompt with each story paired with its headline
+  const pairsText = headlines.map((h, i) => {
+    const storyText = stories[i] || '(no story)';
     const lines = h.lines.map((l, lineIndex) => {
       const role = l.role ? ` [${l.role}]` : '';
       return `  Line ${lineIndex + 1}${role}: "${l.text}" (${l.charCount} chars, required: ${l.minRequired}-${l.maxRequired})`;
     }).join('\n');
     const typeLabel = h.type === 'main+secondary' ? 'main + secondary' : h.totalLines + '-line';
-    return `Headline ${h.headlineNumber} (${typeLabel}) — Assignment: ${h.label || ''}:\n${lines}`;
+    return `--- STORY ${i + 1} ---\n${storyText}\n\nHEADLINE ${h.headlineNumber} (${typeLabel}) — Assignment: ${h.label || ''}:\n${lines}`;
   }).join('\n\n');
 
   try {
@@ -47,16 +49,12 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
-        max_tokens: 3000,
+        max_tokens: 4000,
         messages: [{
           role: 'user',
-          content: `You are a UIL Headline Writing judge. Grade these student headlines using the official UIL scoring rubric (0-4 points per headline).
+          content: `You are a UIL Headline Writing judge. Grade these student headlines using the official UIL scoring rubric (0-4 points per headline). Each headline was written for its own separate story, just like in a real UIL contest.
 
-STORY:
-${story}
-
-STUDENT HEADLINES:
-${headlinesText}
+${pairsText}
 
 OFFICIAL UIL GRADING RUBRIC (0-4 POINTS):
 
@@ -90,11 +88,11 @@ OFFICIAL UIL GRADING RUBRIC (0-4 POINTS):
 - JUDgiNG NOTE: In ties, bad word splits lose
 - "Double quotation marks" - Use 'single marks only'
 - Widely-known acronyms (YMCA) acceptable, but rarely. StuCo is not
-- Comma separates 1 subj/2 vrbs BUT semicolon MUST separate 2 subjs + 2 vrbs → 2 different sentences
+- Comma separates 1 subj/2 vrbs BUT semicolon MUST separate 2 subjs + 2 vrbs = 2 different sentences
 
 **Give 3 POINTS:**
-- Summarizes main element of story fairly well with info taken from opening/lead ¶
-- Headlines should come from TOP/2 leads (first 2 ¶s of story, not some insignificant details way down below)
+- Summarizes main element of story fairly well with info taken from opening/lead paragraph
+- Headlines should come from TOP/2 leads (first 2 paragraphs of story, not some insignificant details way down below)
 - Subject + active present tense verb + direct object (when applicable)
 - Headline is okay or correct, but not outstanding
 - Facts, spelling and mechanics correct
@@ -102,7 +100,7 @@ OFFICIAL UIL GRADING RUBRIC (0-4 POINTS):
 
 **Give 4 POINTS:**
 - A solid summary, maybe clever or play on words
-- NAILS the lead/first 2 ¶s with most important info; uses future element, NOT stale, old news
+- NAILS the lead/first 2 paragraphs with most important info; uses future element, NOT stale, old news
 - Clearly tells the story, with every word needed
 - Strong verb - Present Tense & Active Voice
 - Mechanics, verb tense, facts, spelling correct
@@ -116,7 +114,7 @@ CRITICAL RULES TO ENFORCE:
 6. Don't split verb phrases awkwardly between lines
 7. Use commas for 'and' - semicolons separate 2 complete clauses
 8. No abbreviations unless in the story
-9. Facts must match story exactly
+9. Facts must match the specific story each headline is paired with
 10. Use LAST names only (not first, not both)
 
 ADDITIONAL RULES (from official UIL contest tips):
@@ -163,14 +161,14 @@ Format as JSON:
     });
 
     const data = await response.json();
-    
+
     if (!response.ok) {
       console.error('Anthropic API error:', data);
       return res.status(response.status).json({ error: data.error?.message || 'API request failed' });
     }
 
     const content = data.content.find(item => item.type === 'text')?.text || '';
-    
+
     const jsonMatch = content.match(/\{[\s\S]*\}/);
     if (jsonMatch) {
       const evaluation = JSON.parse(jsonMatch[0]);

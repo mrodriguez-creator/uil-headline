@@ -739,7 +739,7 @@
 
         <div class="content">
             <div class="info-box">
-                <strong>How it works:</strong> You'll receive a randomly generated news story. Write headlines following UIL rules, then get detailed AI feedback to improve your skills!
+                <strong>How it works:</strong> Just like a real UIL contest, you'll receive 6 different news stories. Write a headline for each one following UIL rules, then get detailed AI feedback to improve your skills!
                 <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #2196f3;">
                     <strong>New to UIL Headline Writing?</strong> <a href="tutorial.html" style="color: #1976d2; text-decoration: underline;">Start with our beginner tutorial</a>
                     <span style="margin: 0 8px; color: #999;">|</span>
@@ -762,28 +762,21 @@
 
             <div id="start-section">
                 <div style="text-align: center; padding: 40px 0;">
-                    <button class="btn" onclick="generateStory()">Generate New Story</button>
+                    <button class="btn" onclick="generateStory()">Generate 6 Stories (UIL Format)</button>
                 </div>
             </div>
 
             <div id="story-section" style="display: none;">
-                <div class="story-section">
-                    <div class="story-header">
-                        <div class="story-title" id="story-title">Story</div>
-                    </div>
-                    <div class="story-text" id="story-text"></div>
-                </div>
-
-                <div id="headline-assignments"></div>
+                <div id="story-headline-pairs"></div>
 
                 <div class="submit-section">
-                    <button class="btn" onclick="submitHeadlines()" id="submit-btn">Submit for Feedback</button>
+                    <button class="btn" onclick="submitHeadlines()" id="submit-btn">Submit All Headlines for Feedback</button>
                 </div>
             </div>
 
             <div class="loading" id="loading">
                 <div class="spinner"></div>
-                <p>Analyzing your headlines...</p>
+                <p>Analyzing your 6 headlines...</p>
             </div>
 
             <div class="feedback-section" id="feedback-section">
@@ -791,7 +784,7 @@
                 <div id="progress-chart-container"></div>
                 <div id="dashboard-container"></div>
                 <div class="try-again-btn">
-                    <button class="btn" onclick="resetApp()">Try Another Story</button>
+                    <button class="btn" onclick="resetApp()">Try Another Set of 6 Stories</button>
                 </div>
             </div>
 
@@ -813,7 +806,7 @@
     </div>
 
     <script>
-        let currentStory = null;
+        let currentStories = []; // Array of 6 stories
         let headlines = [];
 
         // Mode state: 'practice', 'timed', or 'mock'
@@ -1266,12 +1259,12 @@
             } catch (e) { return []; }
         }
 
-        function saveToArchive(story, headlinesData, score, mode) {
+        function saveToArchive(stories, headlinesData, score, mode) {
             var archive = loadArchive();
             archive.unshift({
                 id: Date.now(),
                 date: new Date().toISOString(),
-                story: story,
+                stories: stories,
                 headlines: headlinesData,
                 score: score,
                 mode: mode || 'practice'
@@ -1295,7 +1288,8 @@
             var listHtml = recentItems.map(function(item) {
                 var d = new Date(item.date);
                 var dateStr = (d.getMonth() + 1) + '/' + d.getDate() + '/' + d.getFullYear() + ' ' + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                var preview = item.story ? item.story.substring(0, 80) + '...' : 'No story text';
+                var firstStory = item.stories ? item.stories[0] : (item.story || '');
+                var preview = firstStory ? firstStory.substring(0, 80) + '...' : 'No story text';
                 var modeClass = item.mode || 'practice';
 
                 return '<div class="archive-item" onclick="loadArchivedStory(' + item.id + ')">' +
@@ -1313,7 +1307,7 @@
                         'Story Archive' +
                         '<span class="archive-count">' + archive.length + ' stored</span>' +
                     '</div>' +
-                    '<p style="color: #666; font-size: 0.9em; margin-bottom: 12px; font-family: -apple-system, BlinkMacSystemFont, sans-serif;">Click any past story to practice again with the same prompt.</p>' +
+                    '<p style="color: #666; font-size: 0.9em; margin-bottom: 12px; font-family: -apple-system, BlinkMacSystemFont, sans-serif;">Click any past set to practice again with the same 6 stories.</p>' +
                     '<div class="archive-list">' + listHtml + '</div>' +
                     (archive.length > 8 ? '<p style="text-align: center; color: #999; font-size: 12px; margin-top: 10px; font-family: -apple-system, BlinkMacSystemFont, sans-serif;">Showing 8 of ' + archive.length + ' stories</p>' : '') +
                     '<div class="dashboard-actions" style="margin-top: 10px;">' +
@@ -1327,8 +1321,14 @@
             var item = archive.find(function(a) { return a.id === id; });
             if (!item) return;
 
-            currentStory = item.story;
-            displayStory();
+            // Support old single-story format and new 6-story format
+            if (item.stories && Array.isArray(item.stories)) {
+                currentStories = item.stories;
+            } else if (item.story) {
+                // Legacy: single story — duplicate it for all 6 slots
+                currentStories = [item.story, item.story, item.story, item.story, item.story, item.story];
+            }
+            displayStories();
 
             // Start timer for timed or mock modes
             if (currentMode === 'timed' || currentMode === 'mock') {
@@ -1354,7 +1354,7 @@
         async function generateStory() {
             var startBtn = event.target;
             startBtn.disabled = true;
-            startBtn.textContent = 'Generating story...';
+            startBtn.textContent = 'Generating 6 stories...';
 
             try {
                 var response = await fetch('/api/generate-story', {
@@ -1366,9 +1366,9 @@
 
                 if (data.error) throw new Error(data.error);
 
-                if (data.story) {
-                    currentStory = data.story;
-                    displayStory();
+                if (data.stories && data.stories.length === 6) {
+                    currentStories = data.stories;
+                    displayStories();
 
                     // Start timer for timed or mock modes
                     if (currentMode === 'timed' || currentMode === 'mock') {
@@ -1378,29 +1378,45 @@
                     document.getElementById('mode-selector').style.display = 'none';
                     document.getElementById('archive-section').innerHTML = '';
                 } else {
-                    throw new Error('Failed to parse story');
+                    throw new Error('Failed to parse stories');
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert('Error generating story. Please try again.');
+                alert('Error generating stories. Please try again.');
                 startBtn.disabled = false;
-                startBtn.textContent = 'Generate New Story';
+                startBtn.textContent = 'Generate New Stories';
             }
         }
 
-        function displayStory() {
+        function displayStories() {
             document.getElementById('start-section').style.display = 'none';
             document.getElementById('story-section').style.display = 'block';
-            document.getElementById('story-text').textContent = currentStory;
 
-            // Add mock badge to story title if in mock mode
-            var titleEl = document.getElementById('story-title');
-            titleEl.innerHTML = 'Story' + (currentMode === 'mock' ? ' <span class="mock-badge">MOCK CONTEST</span>' : '');
+            var pairsDiv = document.getElementById('story-headline-pairs');
+            pairsDiv.innerHTML = '';
 
-            var assignmentsDiv = document.getElementById('headline-assignments');
-            assignmentsDiv.innerHTML = '';
+            // Mock contest banner at top
+            if (currentMode === 'mock') {
+                var mockBanner = document.createElement('div');
+                mockBanner.style.cssText = 'text-align: center; margin-bottom: 20px;';
+                mockBanner.innerHTML = '<span class="mock-badge" style="font-size: 14px; padding: 6px 16px;">MOCK CONTEST</span>';
+                pairsDiv.appendChild(mockBanner);
+            }
 
-            headlineRequirements.forEach(function(req, index) {
+            currentStories.forEach(function(storyText, index) {
+                var req = headlineRequirements[index];
+
+                // Story block
+                var storyBlock = document.createElement('div');
+                storyBlock.className = 'story-section';
+                storyBlock.innerHTML =
+                    '<div class="story-header">' +
+                        '<div class="story-title">Story ' + (index + 1) + '</div>' +
+                    '</div>' +
+                    '<div class="story-text">' + storyText + '</div>';
+                pairsDiv.appendChild(storyBlock);
+
+                // Headline input section directly below its story
                 var section = document.createElement('div');
                 section.className = 'headline-input-section';
 
@@ -1410,25 +1426,28 @@
                 section.appendChild(label);
 
                 if (req.type === 'main+secondary') {
-                    // Main headline lines
-                    var totalLines = req.mainLines + req.secLines;
                     for (var mLine = 0; mLine < req.mainLines; mLine++) {
                         buildLineInput(section, index, mLine, req.mainMin, req.mainMax, 'Main headline:', 'main headline');
                     }
-                    // Secondary headline lines
                     for (var sLine = 0; sLine < req.secLines; sLine++) {
                         var lineIdx = req.mainLines + sLine;
                         buildLineInput(section, index, lineIdx, req.secMin, req.secMax, 'Secondary headline' + (req.secLines > 1 ? ' line ' + (sLine + 1) + ':' : ':'), 'secondary headline');
                     }
                 } else {
-                    // Standard single/multi-line headline
                     for (var line = 0; line < req.lines; line++) {
                         var lineLabel = req.lines === 1 ? 'Headline:' : (line === 0 ? 'Line 1:' : 'Line ' + (line + 1) + ':');
                         buildLineInput(section, index, line, req.minCount, req.maxCount, lineLabel, 'line ' + (line + 1));
                     }
                 }
 
-                assignmentsDiv.appendChild(section);
+                pairsDiv.appendChild(section);
+
+                // Add a visual separator between story-headline pairs (except after the last one)
+                if (index < 5) {
+                    var separator = document.createElement('hr');
+                    separator.style.cssText = 'border: none; border-top: 3px solid #667eea; margin: 30px 0; opacity: 0.3;';
+                    pairsDiv.appendChild(separator);
+                }
             });
         }
 
@@ -1586,7 +1605,7 @@
                 var response = await fetch('/api/evaluate-headlines', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ story: currentStory, headlines: headlines })
+                    body: JSON.stringify({ stories: currentStories, headlines: headlines })
                 });
 
                 var data = await response.json();
@@ -1595,11 +1614,11 @@
                 // Feature 5: Record session before displaying
                 recordSession(data);
 
-                // Feature 10: Save story + headlines to archive
+                // Feature 10: Save stories + headlines to archive
                 var headlineTexts = headlines.map(function(h) {
                     return h.lines.map(function(l) { return l.text; }).join(' / ');
                 });
-                saveToArchive(currentStory, headlineTexts, data.overallScore, currentMode);
+                saveToArchive(currentStories, headlineTexts, data.overallScore, currentMode);
 
                 displayFeedback(data);
             } catch (error) {
@@ -1708,12 +1727,12 @@
             document.getElementById('feedback-section').style.display = 'none';
             document.getElementById('start-section').style.display = 'block';
             document.getElementById('submit-btn').disabled = false;
-            currentStory = null;
+            currentStories = [];
             headlines = [];
 
             var startBtn = document.querySelector('#start-section button');
             startBtn.disabled = false;
-            startBtn.textContent = 'Generate New Story';
+            startBtn.textContent = 'Generate New Stories';
 
             // Feature 10: Re-render story archive on start screen
             renderArchive();

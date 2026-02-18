@@ -32,22 +32,22 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
+        max_tokens: 4000,
         messages: [{
           role: 'user',
-          content: `You are writing a practice story for the UIL (University Interscholastic League) Headline Writing contest in Texas. Generate ONE news story that students will write headlines for.
+          content: `You are writing practice stories for the UIL (University Interscholastic League) Headline Writing contest in Texas. Generate SIX different news stories. Each story will have a different headline assignment, just like a real UIL contest.
 
 CRITICAL FORMAT REQUIREMENTS (based on real UIL tests):
-- The story is for the "Leaguetown Press," the student newspaper of Leaguetown High School
-- Story should be 150-300 words
-- Include 2-4 direct quotes from named sources (students, teachers, administrators, community members) with first AND last names plus their title/grade
-- The LEAD (first 1-2 paragraphs) must contain the main news — this is what headlines should capture
-- Later paragraphs add detail, quotes, and context
+- All stories are for the "Leaguetown Press," the student newspaper of Leaguetown High School
+- Each story should be 120-200 words (shorter than a full article — UIL stories are concise)
+- Include 1-3 direct quotes from named sources (students, teachers, administrators, community members) with first AND last names plus their title/grade
+- The LEAD (first 1-2 sentences) must contain the main news — this is what headlines should capture
+- Later sentences add detail, quotes, and context
 - Use realistic high school journalism tone — factual, not flowery
 - Include specific details: dates, numbers, dollar amounts, locations, names
 - Stories should feel like they belong in a real Texas high school newspaper
 
-TOPIC VARIETY (pick one at random):
+IMPORTANT: Each of the 6 stories MUST be about a DIFFERENT topic. Pick 6 different topics from this list:
 - New school programs/classes (AI class, culinary program, automotive tech, chamber orchestra)
 - Student clubs and organizations (politics club, grief club, garden club, creative writing club)
 - Community service projects (food drives, cheer clinics for charity, free lunches for summer)
@@ -58,32 +58,46 @@ TOPIC VARIETY (pick one at random):
 - Donations and partnerships (solar panels, auto parts donation, bird-safe windows)
 - Unique human interest stories (superintendent skydiving bet, student DJ, counselor wins pie contest)
 - School improvements (new facilities, technology upgrades, garden projects, composting)
+- Sports (team making playoffs, new coach hired, athlete signs with college, record-breaking season)
+- Arts/Music (theater production, band competition, art show, choir wins state)
 
-DO NOT use generic stories. Make each story unique, specific, and interesting — the kind of story that would appear in a real UIL contest.
+DO NOT use generic stories. Make each story unique, specific, and interesting — the kind of stories that would appear in a real UIL contest.
 
-Format the response as JSON:
+Format the response as JSON with exactly 6 stories:
 {
-  "story": "the full story text"
+  "stories": [
+    "Story 1 full text here...",
+    "Story 2 full text here...",
+    "Story 3 full text here...",
+    "Story 4 full text here...",
+    "Story 5 full text here...",
+    "Story 6 full text here..."
+  ]
 }`
         }]
       })
     });
 
     const data = await response.json();
-    
+
     if (!response.ok) {
       console.error('Anthropic API error:', data);
       return res.status(response.status).json({ error: data.error?.message || 'API request failed' });
     }
 
     const content = data.content.find(item => item.type === 'text')?.text || '';
-    
+
     const jsonMatch = content.match(/\{[\s\S]*\}/);
     if (jsonMatch) {
       const storyData = JSON.parse(jsonMatch[0]);
-      return res.status(200).json(storyData);
+      // Validate we got 6 stories
+      if (storyData.stories && Array.isArray(storyData.stories) && storyData.stories.length === 6) {
+        return res.status(200).json(storyData);
+      } else {
+        return res.status(500).json({ error: 'Expected 6 stories but got ' + (storyData.stories ? storyData.stories.length : 0) });
+      }
     } else {
-      return res.status(500).json({ error: 'Failed to parse story' });
+      return res.status(500).json({ error: 'Failed to parse stories' });
     }
   } catch (error) {
     console.error('Error:', error);
