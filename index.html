@@ -744,14 +744,80 @@
             .progress-chart-card, .dashboard-card { break-inside: avoid; box-shadow: none !important; border: 1px solid #ccc; }
         }
 
-        .print-btn-container { text-align: right; margin-bottom: 10px; }
-        .print-btn {
+        .print-btn-container { text-align: right; margin-bottom: 10px; display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; }
+        .print-btn, .action-btn {
             background: none; border: 1px solid #667eea; color: #667eea;
             padding: 6px 14px; border-radius: 4px; cursor: pointer;
             font-size: 13px; font-family: -apple-system, BlinkMacSystemFont, sans-serif; font-weight: 600;
             transition: all 0.2s;
         }
-        .print-btn:hover { background: #667eea; color: white; }
+        .print-btn:hover, .action-btn:hover { background: #667eea; color: white; }
+        .action-btn.share-btn { border-color: #4caf50; color: #4caf50; }
+        .action-btn.share-btn:hover { background: #4caf50; color: white; }
+        .action-btn.csv-btn { border-color: #ff9800; color: #ff9800; }
+        .action-btn.csv-btn:hover { background: #ff9800; color: white; }
+        .action-btn.copy-btn { border-color: #2196f3; color: #2196f3; }
+        .action-btn.copy-btn:hover { background: #2196f3; color: white; }
+        .copied-toast {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            background: #333; color: white; padding: 12px 24px; border-radius: 8px;
+            font-size: 14px; font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            z-index: 999; opacity: 0; transition: opacity 0.3s;
+            pointer-events: none; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        .copied-toast.visible { opacity: 1; }
+
+        /* Share Code Modal */
+        .share-modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); z-index: 500; display: none;
+            justify-content: center; align-items: center;
+        }
+        .share-modal-overlay.visible { display: flex; }
+        .share-modal {
+            background: white; border-radius: 12px; padding: 30px; max-width: 520px; width: 90%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3); position: relative;
+        }
+        .share-modal h3 {
+            color: #1e3c72; margin-bottom: 10px; font-size: 1.3em;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        .share-modal p {
+            color: #666; font-size: 0.95em; margin-bottom: 15px;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif; line-height: 1.5;
+        }
+        .share-modal .student-name-input {
+            width: 100%; padding: 10px 14px; border: 2px solid #ddd; border-radius: 6px;
+            font-size: 15px; margin-bottom: 12px; font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            transition: border-color 0.2s;
+        }
+        .share-modal .student-name-input:focus { border-color: #667eea; outline: none; }
+        .share-code-box {
+            background: #f5f5f5; border: 2px dashed #ccc; border-radius: 8px;
+            padding: 15px; font-family: monospace; font-size: 11px;
+            word-break: break-all; max-height: 120px; overflow-y: auto;
+            color: #333; margin-bottom: 12px; line-height: 1.4;
+        }
+        .share-modal .modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+        .share-modal .modal-btn {
+            padding: 10px 20px; border-radius: 6px; border: none; cursor: pointer;
+            font-size: 14px; font-weight: 600; transition: all 0.2s;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        .share-modal .modal-btn.primary { background: #4caf50; color: white; }
+        .share-modal .modal-btn.primary:hover { background: #43a047; }
+        .share-modal .modal-btn.secondary { background: #eee; color: #333; }
+        .share-modal .modal-btn.secondary:hover { background: #ddd; }
+        .share-modal .close-btn {
+            position: absolute; top: 10px; right: 15px; background: none; border: none;
+            font-size: 22px; cursor: pointer; color: #999; padding: 5px;
+        }
+        .share-modal .close-btn:hover { color: #333; }
+        body.dark-mode .share-modal { background: #2d2d2d; }
+        body.dark-mode .share-modal h3 { color: #8ab4f8; }
+        body.dark-mode .share-modal p { color: #bbb; }
+        body.dark-mode .share-modal .student-name-input { background: #3a3a3a; border-color: #555; color: #eee; }
+        body.dark-mode .share-code-box { background: #3a3a3a; border-color: #555; color: #ddd; }
 
         /* --- Feature 12: Dark Mode --- */
         .dark-toggle {
@@ -868,6 +934,8 @@
                     <a href="mistakes.html" style="color: #1976d2; text-decoration: underline;">Common mistakes</a>
                     <span style="margin: 0 8px; color: #999;">|</span>
                     <a href="verbs.html" style="color: #1976d2; text-decoration: underline;">Verb bank</a>
+                    <span style="margin: 0 8px; color: #999;">|</span>
+                    <a href="coach.html" style="color: #4caf50; text-decoration: underline; font-weight: 600;">Coach Dashboard</a>
                 </div>
             </div>
 
@@ -910,6 +978,9 @@
 
             <div class="feedback-section" id="feedback-section">
                 <div class="print-btn-container">
+                    <button class="action-btn copy-btn" onclick="copyResultsToClipboard()">Copy Results</button>
+                    <button class="action-btn csv-btn" onclick="exportCSV()">Export CSV</button>
+                    <button class="action-btn share-btn" onclick="openShareModal()">Share with Coach</button>
                     <button class="print-btn" onclick="window.print()">Print Results</button>
                 </div>
                 <div id="feedback-content"></div>
@@ -925,6 +996,25 @@
             <div id="archive-section"></div>
         </div>
     </div>
+
+    <!-- Share with Coach Modal -->
+    <div class="share-modal-overlay" id="share-modal-overlay" onclick="closeShareModal(event)">
+        <div class="share-modal">
+            <button class="close-btn" onclick="document.getElementById('share-modal-overlay').classList.remove('visible')">&times;</button>
+            <h3>Share Results with Coach</h3>
+            <p>Enter your name, then copy the code below and send it to your coach. They can paste it into the <a href="coach.html" target="_blank" style="color: #667eea;">Coach Dashboard</a> to view your full results.</p>
+            <input type="text" class="student-name-input" id="student-name-input" placeholder="Your name (e.g., Jane Smith)" maxlength="50">
+            <div class="share-code-box" id="share-code-box">Generate code first...</div>
+            <div class="modal-actions">
+                <button class="modal-btn secondary" onclick="document.getElementById('share-modal-overlay').classList.remove('visible')">Close</button>
+                <button class="modal-btn primary" id="generate-share-btn" onclick="generateShareCode()">Generate Code</button>
+                <button class="modal-btn primary" id="copy-share-btn" onclick="copyShareCode()" style="display:none;">Copy Code</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="copied-toast" id="copied-toast"></div>
 
     <!-- Time's Up Overlay -->
     <div class="time-up-overlay" id="time-up-overlay">
@@ -1768,6 +1858,7 @@
         }
 
         function displayFeedback(evaluation) {
+            lastEvaluation = evaluation; // Store for copy/export/share
             document.getElementById('loading').style.display = 'none';
             document.getElementById('feedback-section').style.display = 'block';
 
@@ -1988,6 +2079,173 @@
                 else if (count === 1) genBtn.textContent = 'Generate 1 Story (Quick Practice)';
                 else genBtn.textContent = 'Generate ' + count + ' Stories';
             }
+        }
+
+        // =============================================
+        // Feature 16: Coach Sharing Tools
+        // =============================================
+
+        var lastEvaluation = null;
+
+        function showToast(message) {
+            var toast = document.getElementById('copied-toast');
+            toast.textContent = message;
+            toast.classList.add('visible');
+            setTimeout(function() { toast.classList.remove('visible'); }, 2500);
+        }
+
+        // --- Copy Results to Clipboard (plain text summary) ---
+        function copyResultsToClipboard() {
+            if (!lastEvaluation) { showToast('No results to copy'); return; }
+            var eval = lastEvaluation;
+            var maxPossible = currentStories.length * 4;
+            var text = '=== UIL Headline Writing Results ===\n';
+            text += 'Date: ' + new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString() + '\n';
+            text += 'Mode: ' + currentMode.toUpperCase() + '\n';
+            text += 'Stories: ' + currentStories.length + '\n';
+            text += 'Overall Score: ' + eval.overallScore + '/' + maxPossible + '\n';
+            text += 'Overall Feedback: ' + eval.overallFeedback + '\n\n';
+
+            eval.headlines.forEach(function(hl, i) {
+                var studentHL = headlines[i] ? headlines[i].lines.map(function(l) { return l.text; }).join(' / ') : '';
+                text += '--- Headline ' + hl.number + ' (Score: ' + hl.score + '/4) ---\n';
+                text += 'Student: ' + studentHL + '\n';
+                if (hl.strengths && hl.strengths.length > 0) {
+                    text += 'Strengths: ' + hl.strengths.join('; ') + '\n';
+                }
+                if (hl.improvements && hl.improvements.length > 0) {
+                    text += 'Improvements: ' + hl.improvements.join('; ') + '\n';
+                }
+                if (hl.suggestedRevision) {
+                    text += 'Suggested: ' + hl.suggestedRevision + '\n';
+                }
+                text += 'Feedback: ' + hl.feedback + '\n\n';
+            });
+
+            navigator.clipboard.writeText(text).then(function() {
+                showToast('Results copied to clipboard!');
+            }).catch(function() {
+                // Fallback for older browsers
+                var textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                showToast('Results copied to clipboard!');
+            });
+        }
+
+        // --- Export CSV ---
+        function exportCSV() {
+            if (!lastEvaluation) { showToast('No results to export'); return; }
+            var eval = lastEvaluation;
+
+            var rows = [['Headline #', 'Type', 'Student Headline', 'Score', 'Strengths', 'Improvements', 'Suggested Revision', 'Feedback']];
+
+            eval.headlines.forEach(function(hl, i) {
+                var studentHL = headlines[i] ? headlines[i].lines.map(function(l) { return l.text; }).join(' / ') : '';
+                var req = headlineRequirements[i];
+                var typeLabel = req ? (req.type === 'main+secondary' ? 'Main+Secondary' : req.lines + '-Line') : '';
+                rows.push([
+                    hl.number,
+                    typeLabel,
+                    '"' + studentHL.replace(/"/g, '""') + '"',
+                    hl.score + '/4',
+                    '"' + (hl.strengths || []).join('; ').replace(/"/g, '""') + '"',
+                    '"' + (hl.improvements || []).join('; ').replace(/"/g, '""') + '"',
+                    '"' + (hl.suggestedRevision || '').replace(/"/g, '""') + '"',
+                    '"' + (hl.feedback || '').replace(/"/g, '""') + '"'
+                ]);
+            });
+
+            // Add summary row
+            var maxPossible = currentStories.length * 4;
+            rows.push([]);
+            rows.push(['TOTAL', '', '', eval.overallScore + '/' + maxPossible, '', '', '', '"' + (eval.overallFeedback || '').replace(/"/g, '""') + '"']);
+            rows.push(['Date', new Date().toLocaleDateString(), 'Mode', currentMode.toUpperCase()]);
+
+            var csvContent = rows.map(function(row) { return row.join(','); }).join('\n');
+            var blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            var link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'uil-headline-results-' + new Date().toISOString().slice(0, 10) + '.csv';
+            link.click();
+            URL.revokeObjectURL(link.href);
+            showToast('CSV downloaded!');
+        }
+
+        // --- Share with Coach (generates a compact encoded result code) ---
+        function openShareModal() {
+            if (!lastEvaluation) { showToast('No results to share'); return; }
+            document.getElementById('share-modal-overlay').classList.add('visible');
+            document.getElementById('share-code-box').textContent = 'Enter your name and click "Generate Code"';
+            document.getElementById('generate-share-btn').style.display = '';
+            document.getElementById('copy-share-btn').style.display = 'none';
+        }
+
+        function closeShareModal(event) {
+            if (event.target === event.currentTarget) {
+                document.getElementById('share-modal-overlay').classList.remove('visible');
+            }
+        }
+
+        function generateShareCode() {
+            var studentName = document.getElementById('student-name-input').value.trim();
+            if (!studentName) {
+                document.getElementById('student-name-input').style.borderColor = '#f44336';
+                document.getElementById('student-name-input').focus();
+                return;
+            }
+            document.getElementById('student-name-input').style.borderColor = '#ddd';
+
+            var shareData = {
+                v: 1, // version
+                name: studentName,
+                date: new Date().toISOString(),
+                mode: currentMode,
+                storyCount: currentStories.length,
+                overall: lastEvaluation.overallScore,
+                max: currentStories.length * 4,
+                overallFeedback: lastEvaluation.overallFeedback,
+                hl: lastEvaluation.headlines.map(function(h, i) {
+                    var studentHL = headlines[i] ? headlines[i].lines.map(function(l) { return l.text; }).join(' / ') : '';
+                    var req = headlineRequirements[i];
+                    return {
+                        n: h.number,
+                        t: req ? (req.type === 'main+secondary' ? 'M+S' : req.lines + 'L') : '?',
+                        s: h.score,
+                        sh: studentHL,
+                        sr: h.suggestedRevision || null,
+                        st: h.strengths || [],
+                        im: h.improvements || [],
+                        fb: h.feedback
+                    };
+                })
+            };
+
+            var jsonStr = JSON.stringify(shareData);
+            var encoded = btoa(unescape(encodeURIComponent(jsonStr)));
+            var code = 'UIL:' + encoded;
+
+            document.getElementById('share-code-box').textContent = code;
+            document.getElementById('generate-share-btn').style.display = 'none';
+            document.getElementById('copy-share-btn').style.display = '';
+        }
+
+        function copyShareCode() {
+            var code = document.getElementById('share-code-box').textContent;
+            navigator.clipboard.writeText(code).then(function() {
+                showToast('Share code copied! Send this to your coach.');
+            }).catch(function() {
+                var textarea = document.createElement('textarea');
+                textarea.value = code;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                showToast('Share code copied! Send this to your coach.');
+            });
         }
 
         // Render archive on initial page load
