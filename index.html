@@ -726,9 +726,129 @@
             .comparison-row { grid-template-columns: 1fr; }
             .dashboard-stats { grid-template-columns: 1fr; }
         }
+
+        /* --- Feature 11: Print-Friendly Results --- */
+        @media print {
+            body { background: white !important; padding: 0 !important; }
+            .container { box-shadow: none !important; border-radius: 0 !important; }
+            .header { background: white !important; color: black !important; padding: 15px !important; border-bottom: 2px solid #333; }
+            .header h1 { font-size: 1.5em; }
+            .timer-bar, .mode-selector, #mode-descriptions, #start-section, .submit-section,
+            .try-again-btn, .dark-toggle, .story-count-selector, #archive-section,
+            .dashboard-actions, .clear-data-btn, .print-btn-container { display: none !important; }
+            .feedback-section { display: block !important; }
+            .feedback-card { break-inside: avoid; box-shadow: none !important; border: 1px solid #ccc; margin-bottom: 15px; }
+            .score { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+            .comparison-col.suggested { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+            .strength, .improvement { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+            .progress-chart-card, .dashboard-card { break-inside: avoid; box-shadow: none !important; border: 1px solid #ccc; }
+        }
+
+        .print-btn-container { text-align: right; margin-bottom: 10px; }
+        .print-btn {
+            background: none; border: 1px solid #667eea; color: #667eea;
+            padding: 6px 14px; border-radius: 4px; cursor: pointer;
+            font-size: 13px; font-family: -apple-system, BlinkMacSystemFont, sans-serif; font-weight: 600;
+            transition: all 0.2s;
+        }
+        .print-btn:hover { background: #667eea; color: white; }
+
+        /* --- Feature 12: Dark Mode --- */
+        .dark-toggle {
+            position: fixed; top: 12px; right: 12px; z-index: 300;
+            background: rgba(255,255,255,0.9); border: 1px solid #ccc; border-radius: 20px;
+            padding: 6px 14px; cursor: pointer; font-size: 13px;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif; font-weight: 600;
+            transition: all 0.2s; color: #333;
+        }
+        .dark-toggle:hover { background: #667eea; color: white; border-color: #667eea; }
+
+        body.dark-mode { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); }
+        body.dark-mode .container { background: #1e1e2e; color: #e0e0e0; }
+        body.dark-mode .header { background: linear-gradient(135deg, #0f1b3d 0%, #1a2d5a 100%); }
+        body.dark-mode .content { color: #e0e0e0; }
+        body.dark-mode .info-box { background: #1a2744; border-color: #2196f3; color: #b0c4de; }
+        body.dark-mode .info-box a { color: #64b5f6; }
+        body.dark-mode .story-section { background: #252540; border-left-color: #667eea; }
+        body.dark-mode .story-text { color: #ccc; }
+        body.dark-mode .headline-input-section { background: #2a2a3e; border-color: #444; }
+        body.dark-mode .headline-input { background: #1e1e2e; color: #e0e0e0; border-color: #444; }
+        body.dark-mode .headline-input:focus { border-color: #667eea; }
+        body.dark-mode .char-box { background: #2a2a3e; border-color: #444; color: #aaa; }
+        body.dark-mode .char-box.filled { background: #1a3a5c; border-color: #667eea; color: #e0e0e0; }
+        body.dark-mode .char-box.over-limit { background: #4a1a1a; border-color: #f44336; color: #ff8a80; }
+        body.dark-mode .char-count { color: #999; }
+        body.dark-mode .feedback-card { background: #252540; border-left-color: #667eea; box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+        body.dark-mode .your-headline { background: #2a2a3e; color: #e0e0e0; }
+        body.dark-mode .feedback-text { color: #bbb; }
+        body.dark-mode .comparison-col.yours { background: #2a2a3e; border-color: #444; color: #e0e0e0; }
+        body.dark-mode .comparison-col.suggested { background: #1a3328; border-color: #4caf50; color: #e0e0e0; }
+        body.dark-mode .strength { background: #1a3328; border-left-color: #28a745; color: #b0d8b0; }
+        body.dark-mode .improvement { background: #3a2e1a; border-left-color: #ffc107; color: #d4c08a; }
+        body.dark-mode .mode-btn { background: #2a2a3e; color: #b0b0d0; border-color: #444; }
+        body.dark-mode .mode-btn:hover { background: #3a3a5e; }
+        body.dark-mode .mode-btn.active { background: #667eea; color: white; }
+        body.dark-mode .mode-btn.mock-active { background: #e74c3c; color: white; border-color: #e74c3c; }
+        body.dark-mode .dashboard-card { background: #252540; border-left-color: #9c27b0; box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+        body.dark-mode .progress-chart-card { background: #252540; border-left-color: #667eea; box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+        body.dark-mode .archive-card { background: #252540; border-left-color: #e67e22; box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+        body.dark-mode .archive-item { border-color: #444; color: #e0e0e0; }
+        body.dark-mode .archive-item:hover { border-color: #e67e22; background: #2a2a3e; }
+        body.dark-mode .stat-box { background: #2a2a3e; }
+        body.dark-mode .stat-label { color: #999; }
+        body.dark-mode .headline-label { color: #8899cc; }
+        body.dark-mode .story-title { color: #8899cc; }
+        body.dark-mode .dark-toggle { background: rgba(30,30,46,0.9); color: #e0e0e0; border-color: #555; }
+        body.dark-mode .dark-toggle:hover { background: #667eea; color: white; }
+
+        /* --- Feature 14: Score Breakdown by Headline Type --- */
+        .breakdown-card {
+            background: white; border-radius: 8px; padding: 20px; margin-bottom: 20px;
+            border-left: 4px solid #2196f3; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        body.dark-mode .breakdown-card { background: #252540; box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+        .breakdown-title { font-size: 1.2em; color: #2196f3; margin-bottom: 15px; font-weight: bold; }
+        .breakdown-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+        }
+        .breakdown-item {
+            text-align: center; padding: 12px; background: #f8f9fa; border-radius: 6px;
+        }
+        body.dark-mode .breakdown-item { background: #2a2a3e; }
+        .breakdown-type-label {
+            font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: #999;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif; font-weight: 600; margin-bottom: 6px;
+        }
+        .breakdown-score {
+            font-size: 1.8em; font-weight: bold; color: #667eea;
+        }
+        .breakdown-max { font-size: 12px; color: #999; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
+
+        @media (max-width: 600px) {
+            .breakdown-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        /* --- Feature 15: Quick Practice (Story Count Selector) --- */
+        .story-count-selector {
+            display: flex; justify-content: center; gap: 8px; margin: 10px 0;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        .story-count-btn {
+            padding: 6px 14px; border: 2px solid #e0e0e0; border-radius: 6px;
+            background: white; color: #666; font-size: 13px; font-weight: 600;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .story-count-btn:hover { border-color: #667eea; color: #667eea; }
+        .story-count-btn.active { background: #667eea; color: white; border-color: #667eea; }
+        body.dark-mode .story-count-btn { background: #2a2a3e; color: #b0b0d0; border-color: #444; }
+        body.dark-mode .story-count-btn:hover { border-color: #667eea; color: #667eea; }
+        body.dark-mode .story-count-btn.active { background: #667eea; color: white; }
     </style>
 </head>
 <body>
+    <!-- Feature 12: Dark Mode Toggle -->
+    <button class="dark-toggle" id="dark-toggle" onclick="toggleDarkMode()">Dark Mode</button>
+
     <div class="container">
         <div class="timer-bar" id="timer-bar">30:00</div>
 
@@ -760,9 +880,18 @@
                 <span id="mode-desc-text"><strong style="color: #667eea;">Practice Mode:</strong> No timer. Real-time rule violation hints appear as you type. Get full AI feedback after submitting.</span>
             </div>
 
+            <!-- Feature 15: Quick Practice - Story Count Selector -->
+            <div class="story-count-selector" id="story-count-selector">
+                <span style="font-size: 13px; color: #666; align-self: center; margin-right: 4px;">Stories:</span>
+                <button class="story-count-btn" onclick="setStoryCount(1)">1</button>
+                <button class="story-count-btn" onclick="setStoryCount(2)">2</button>
+                <button class="story-count-btn" onclick="setStoryCount(3)">3</button>
+                <button class="story-count-btn active" onclick="setStoryCount(6)">6 (UIL)</button>
+            </div>
+
             <div id="start-section">
                 <div style="text-align: center; padding: 40px 0;">
-                    <button class="btn" onclick="generateStory()">Generate 6 Stories (UIL Format)</button>
+                    <button class="btn" onclick="generateStory()" id="generate-btn">Generate 6 Stories (UIL Format)</button>
                 </div>
             </div>
 
@@ -780,7 +909,11 @@
             </div>
 
             <div class="feedback-section" id="feedback-section">
+                <div class="print-btn-container">
+                    <button class="print-btn" onclick="window.print()">Print Results</button>
+                </div>
                 <div id="feedback-content"></div>
+                <div id="breakdown-container"></div>
                 <div id="progress-chart-container"></div>
                 <div id="dashboard-container"></div>
                 <div class="try-again-btn">
@@ -1136,8 +1269,8 @@
                     '<p style="color: #666; font-size: 0.95em; margin-bottom: 15px;">Based on ' + totalSessions + ' practice session' + (totalSessions !== 1 ? 's' : '') + ' — focus your practice on the top categories.</p>' +
                     '<div class="dashboard-stats">' +
                         '<div class="stat-box"><div class="stat-number">' + totalSessions + '</div><div class="stat-label">Sessions</div></div>' +
-                        '<div class="stat-box"><div class="stat-number">' + avgScore + '</div><div class="stat-label">Avg Score /24</div></div>' +
-                        '<div class="stat-box"><div class="stat-number">' + bestScore + '</div><div class="stat-label">Best Score /24</div></div>' +
+                        '<div class="stat-box"><div class="stat-number">' + avgScore + '</div><div class="stat-label">Avg Score</div></div>' +
+                        '<div class="stat-box"><div class="stat-number">' + bestScore + '</div><div class="stat-label">Best Score</div></div>' +
                     '</div>' +
                     (barsHtml ? '<div style="margin-top: 20px;">' + barsHtml + '</div>' : '<p style="color: #999; margin-top: 15px;">No specific weaknesses identified yet.</p>') +
                     '<div class="dashboard-actions">' +
@@ -1328,6 +1461,7 @@
                 // Legacy: single story — duplicate it for all 6 slots
                 currentStories = [item.story, item.story, item.story, item.story, item.story, item.story];
             }
+            selectedStoryCount = currentStories.length;
             displayStories();
 
             // Start timer for timed or mock modes
@@ -1336,6 +1470,7 @@
             }
 
             document.getElementById('mode-selector').style.display = 'none';
+            document.getElementById('story-count-selector').style.display = 'none';
             document.getElementById('start-section').style.display = 'none';
             document.getElementById('archive-section').innerHTML = '';
         }
@@ -1354,7 +1489,8 @@
         async function generateStory() {
             var startBtn = event.target;
             startBtn.disabled = true;
-            startBtn.textContent = 'Generating 6 stories...';
+            var count = selectedStoryCount;
+            startBtn.textContent = 'Generating ' + count + ' stor' + (count === 1 ? 'y' : 'ies') + '...';
 
             try {
                 var response = await fetch('/api/generate-story', {
@@ -1367,7 +1503,8 @@
                 if (data.error) throw new Error(data.error);
 
                 if (data.stories && data.stories.length === 6) {
-                    currentStories = data.stories;
+                    // Use only the selected number of stories
+                    currentStories = data.stories.slice(0, count);
                     displayStories();
 
                     // Start timer for timed or mock modes
@@ -1376,6 +1513,7 @@
                     }
 
                     document.getElementById('mode-selector').style.display = 'none';
+                    document.getElementById('story-count-selector').style.display = 'none';
                     document.getElementById('archive-section').innerHTML = '';
                 } else {
                     throw new Error('Failed to parse stories');
@@ -1545,7 +1683,9 @@
             headlines = [];
             var allValid = true;
 
-            headlineRequirements.forEach(function(req, index) {
+            var activeCount = currentStories.length;
+            for (var index = 0; index < activeCount; index++) {
+                var req = headlineRequirements[index];
                 var headlineLines = [];
                 var totalLines;
                 if (req.type === 'main+secondary') {
@@ -1579,7 +1719,7 @@
                     type: req.type || 'single',
                     label: req.label
                 });
-            });
+            }
 
             if (!allValid && !skipValidation) {
                 alert('Please fill in all headline fields before submitting.');
@@ -1638,15 +1778,16 @@
             var overallCard = document.createElement('div');
             overallCard.className = 'feedback-card';
 
-            var scoreClass = evaluation.overallScore >= 20 ? 'excellent' :
-                            evaluation.overallScore >= 15 ? 'good' :
-                            evaluation.overallScore >= 10 ? 'fair' : 'needs-work';
+            var maxPossible = currentStories.length * 4;
+            var scoreClass = evaluation.overallScore >= (maxPossible * 0.83) ? 'excellent' :
+                            evaluation.overallScore >= (maxPossible * 0.62) ? 'good' :
+                            evaluation.overallScore >= (maxPossible * 0.42) ? 'fair' : 'needs-work';
 
             overallCard.innerHTML =
                 '<div class="feedback-headline">Overall Performance' +
                 (currentMode === 'mock' ? ' <span class="mock-badge">MOCK CONTEST</span>' : '') +
                 '</div>' +
-                '<div class="score ' + scoreClass + '">Score: ' + evaluation.overallScore + '/24</div>' +
+                '<div class="score ' + scoreClass + '">Score: ' + evaluation.overallScore + '/' + maxPossible + '</div>' +
                 '<div class="feedback-text">' + evaluation.overallFeedback + '</div>';
             feedbackDiv.appendChild(overallCard);
 
@@ -1708,6 +1849,9 @@
                 feedbackDiv.appendChild(card);
             });
 
+            // Feature 14: Render score breakdown by headline type
+            renderBreakdown(evaluation);
+
             // Feature 9: Render progress chart
             renderProgressChart();
 
@@ -1721,8 +1865,10 @@
             document.getElementById('timer-bar').className = 'timer-bar';
             document.getElementById('time-up-overlay').classList.remove('visible');
             document.getElementById('mode-selector').style.display = 'flex';
+            document.getElementById('story-count-selector').style.display = 'flex';
             document.getElementById('dashboard-container').innerHTML = '';
             document.getElementById('progress-chart-container').innerHTML = '';
+            document.getElementById('breakdown-container').innerHTML = '';
 
             document.getElementById('feedback-section').style.display = 'none';
             document.getElementById('start-section').style.display = 'block';
@@ -1730,16 +1876,123 @@
             currentStories = [];
             headlines = [];
 
-            var startBtn = document.querySelector('#start-section button');
+            var startBtn = document.getElementById('generate-btn');
             startBtn.disabled = false;
-            startBtn.textContent = 'Generate New Stories';
+            setStoryCount(selectedStoryCount); // Restore button text
 
             // Feature 10: Re-render story archive on start screen
             renderArchive();
         }
 
+        // =============================================
+        // Feature 12: Dark Mode
+        // =============================================
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            var isDark = document.body.classList.contains('dark-mode');
+            document.getElementById('dark-toggle').textContent = isDark ? 'Light Mode' : 'Dark Mode';
+            try { localStorage.setItem('uil-dark-mode', isDark ? '1' : '0'); } catch (e) {}
+        }
+
+        function loadDarkMode() {
+            try {
+                if (localStorage.getItem('uil-dark-mode') === '1') {
+                    document.body.classList.add('dark-mode');
+                    document.getElementById('dark-toggle').textContent = 'Light Mode';
+                }
+            } catch (e) {}
+        }
+
+        // =============================================
+        // Feature 14: Score Breakdown by Headline Type
+        // =============================================
+
+        function renderBreakdown(evaluation) {
+            var container = document.getElementById('breakdown-container');
+            if (!container || !evaluation.headlines) { container.innerHTML = ''; return; }
+
+            // Categorize scores by headline type
+            var activeCount = selectedStoryCount;
+            var types = { '1-line': [], '2-line': [], '3-line': [], 'main+sec': [] };
+
+            evaluation.headlines.forEach(function(hl, i) {
+                if (i >= activeCount) return;
+                var req = headlineRequirements[i];
+                if (req.type === 'main+secondary') types['main+sec'].push(hl.score);
+                else if (req.lines === 1) types['1-line'].push(hl.score);
+                else if (req.lines === 2) types['2-line'].push(hl.score);
+                else if (req.lines === 3) types['3-line'].push(hl.score);
+            });
+
+            var itemsHtml = '';
+            var typeLabels = { '1-line': '1-Line', '2-line': '2-Line', '3-line': '3-Line', 'main+sec': 'Main + Sec' };
+            var typeColors = { '1-line': '#4caf50', '2-line': '#2196f3', '3-line': '#ff9800', 'main+sec': '#9c27b0' };
+
+            Object.keys(types).forEach(function(key) {
+                var scores = types[key];
+                if (scores.length === 0) return;
+                var avg = (scores.reduce(function(s, v) { return s + v; }, 0) / scores.length).toFixed(1);
+                var total = scores.reduce(function(s, v) { return s + v; }, 0);
+
+                itemsHtml +=
+                    '<div class="breakdown-item">' +
+                        '<div class="breakdown-type-label">' + typeLabels[key] + '</div>' +
+                        '<div class="breakdown-score" style="color: ' + typeColors[key] + ';">' + avg + '</div>' +
+                        '<div class="breakdown-max">' + total + '/' + (scores.length * 4) + ' pts (' + scores.length + ' headline' + (scores.length > 1 ? 's' : '') + ')</div>' +
+                    '</div>';
+            });
+
+            // Also show historical breakdown
+            var history = loadHistory();
+            var historyHtml = '';
+            if (history.sessions.length >= 3) {
+                // Calculate historical per-type averages from weakness categories
+                var totalAvg = (history.sessions.reduce(function(s, sess) { return s + sess.score; }, 0) / history.sessions.length).toFixed(1);
+                var maxPossible = activeCount * 4;
+                historyHtml =
+                    '<div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #e0e0e0;">' +
+                        '<div style="font-size: 12px; color: #999; font-family: -apple-system, BlinkMacSystemFont, sans-serif;">' +
+                            'Lifetime average: <strong style="color: #667eea;">' + totalAvg + '/' + maxPossible + '</strong> across ' + history.sessions.length + ' sessions' +
+                        '</div>' +
+                    '</div>';
+            }
+
+            container.innerHTML =
+                '<div class="breakdown-card">' +
+                    '<div class="breakdown-title">Score Breakdown by Headline Type</div>' +
+                    '<div class="breakdown-grid">' + itemsHtml + '</div>' +
+                    historyHtml +
+                '</div>';
+        }
+
+        // =============================================
+        // Feature 15: Quick Practice (Story Count)
+        // =============================================
+
+        var selectedStoryCount = 6;
+
+        function setStoryCount(count) {
+            selectedStoryCount = count;
+            // Update active button
+            document.querySelectorAll('.story-count-btn').forEach(function(btn) {
+                btn.classList.remove('active');
+                if (parseInt(btn.textContent) === count || (btn.textContent.includes('UIL') && count === 6)) {
+                    btn.classList.add('active');
+                }
+            });
+            // Update generate button text
+            var genBtn = document.getElementById('generate-btn');
+            if (genBtn) {
+                if (count === 6) genBtn.textContent = 'Generate 6 Stories (UIL Format)';
+                else if (count === 1) genBtn.textContent = 'Generate 1 Story (Quick Practice)';
+                else genBtn.textContent = 'Generate ' + count + ' Stories';
+            }
+        }
+
         // Render archive on initial page load
         document.addEventListener('DOMContentLoaded', function() {
+            loadDarkMode();
             renderArchive();
         });
     </script>

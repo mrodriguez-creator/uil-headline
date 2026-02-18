@@ -375,6 +375,31 @@
                         <h3>Verb Strength</h3>
                         <p>Replace weak verbs with strong alternatives</p>
                     </div>
+                    <div class="drill-card" onclick="startDrill('names')">
+                        <span class="drill-icon">NM</span>
+                        <h3>Name Usage</h3>
+                        <p>Fix name errors: last name only, no first+last</p>
+                    </div>
+                    <div class="drill-card" onclick="startDrill('word-splits')">
+                        <span class="drill-icon">WS</span>
+                        <h3>Word Splits</h3>
+                        <p>Identify bad line breaks in multi-line headlines</p>
+                    </div>
+                    <div class="drill-card" onclick="startDrill('fix-it')">
+                        <span class="drill-icon">FX</span>
+                        <h3>Fix the Headline</h3>
+                        <p>Find and fix the UIL rule violation in each headline</p>
+                    </div>
+                    <div class="drill-card" onclick="startDrill('which-better')">
+                        <span class="drill-icon">AB</span>
+                        <h3>Which Is Better?</h3>
+                        <p>Choose the stronger headline and explain why</p>
+                    </div>
+                    <div class="drill-card" onclick="startDrill('lead-id')">
+                        <span class="drill-icon">LD</span>
+                        <h3>Lead Identification</h3>
+                        <p>Pick the main idea from a story lead paragraph</p>
+                    </div>
                 </div>
             </div>
 
@@ -726,6 +751,136 @@
                     if (exactMatch) return { result: 'correct', message: 'Excellent verb choice!' };
                     if (!hasWeak && norm.length > 3) return { result: 'partial', message: 'Good replacement! Some strong options: "' + exercise.acceptable.slice(0, 3).join('", "') + '"' };
                     return { result: 'incorrect', message: 'Still using "' + exercise.weakVerb + '". Try: "' + exercise.acceptable[0] + '"' };
+                }
+            },
+
+            'names': {
+                title: 'Name Usage Drill',
+                instructions: 'Fix this headline so it uses LAST NAME ONLY (UIL rule: no first names, no first+last combos). Type the corrected headline.',
+                exercises: [
+                    { prompt: 'John Smith wins science fair', acceptable: ['smith wins science fair'], hint: 'Use last name only: Smith' },
+                    { prompt: 'Maria Garcia earns scholarship', acceptable: ['garcia earns scholarship'], hint: 'Use last name only: Garcia' },
+                    { prompt: 'Coach David Lee resigns', acceptable: ['coach lee resigns', 'lee resigns'], hint: 'Drop the first name, keep the title if you want.' },
+                    { prompt: 'Amy and Brian Johnson compete', acceptable: ['johnsons compete', 'johnson siblings compete'], hint: 'Two people with same last name? Use plural last name.' },
+                    { prompt: 'Sarah Chen leads robotics team', acceptable: ['chen leads robotics team'], hint: 'Last name only: Chen' },
+                    { prompt: 'Principal Tom Rivera announces plan', acceptable: ['principal rivera announces plan', 'rivera announces plan'], hint: 'Drop the first name, keep the title.' },
+                    { prompt: 'Junior Mike Torres sets record', acceptable: ['torres sets record'], hint: 'Drop the first name and the grade label.' },
+                    { prompt: 'Emma and Olivia Brown win duet', acceptable: ['browns win duet', 'brown sisters win duet'], hint: 'Same last name exception — use plural.' },
+                    { prompt: 'Dr. James Wilson retires', acceptable: ['dr. wilson retires', 'wilson retires'], hint: 'Keep the title if relevant, drop first name.' },
+                    { prompt: 'Sophomore Kate Adams leads club', acceptable: ['adams leads club'], hint: 'Drop both the grade and first name.' },
+                    { prompt: 'Robert and Lisa Kim donate', acceptable: ['kims donate', 'kim family donates'], hint: 'Same last name — use plural.' },
+                    { prompt: 'Senior Alex Martinez earns honor', acceptable: ['martinez earns honor'], hint: 'Drop grade and first name.' }
+                ],
+                check: function(answer, exercise) {
+                    var norm = answer.trim().toLowerCase().replace(/[^a-z0-9\s.]/g, '');
+                    var exactMatch = exercise.acceptable.some(function(a) { return norm === a.toLowerCase(); });
+                    if (exactMatch) return { result: 'correct', message: 'Perfect! Last name only, UIL approved.' };
+                    // Check if they still have first+last combo
+                    var hasFirstLast = /\b[A-Z][a-z]+ [A-Z][a-z]+\b/.test(answer.trim());
+                    if (!hasFirstLast && norm.length > 3) return { result: 'partial', message: 'Good fix! Model answer: "' + exercise.acceptable[0] + '"' };
+                    return { result: 'incorrect', message: 'Still has a name issue. Try: "' + exercise.acceptable[0] + '"' };
+                }
+            },
+
+            'word-splits': {
+                title: 'Word Split Drill',
+                instructions: 'This 2-line headline has a bad word split between lines. Type "good" if the split is acceptable or "bad" if it violates UIL rules. Bad splits: preposition split from its object, infinitive "to" split from verb, article split from noun.',
+                exercises: [
+                    { prompt: 'Line 1: "Board votes to"\nLine 2: "extend school year"', answer: 'bad', hint: 'Infinitive "to" is split from "extend" — bad split.' },
+                    { prompt: 'Line 1: "Students raise funds"\nLine 2: "for new gym equipment"', answer: 'good', hint: 'Each line is a complete thought — acceptable.' },
+                    { prompt: 'Line 1: "Team advances to"\nLine 2: "state championship"', answer: 'bad', hint: '"To" is split from "state championship" — bad split.' },
+                    { prompt: 'Line 1: "Principal unveils plan for"\nLine 2: "campus improvements"', answer: 'bad', hint: 'Preposition "for" is split from its object "campus improvements."' },
+                    { prompt: 'Line 1: "Choir earns first"\nLine 2: "at state competition"', answer: 'good', hint: '"First" can stand alone at end of line — acceptable.' },
+                    { prompt: 'Line 1: "Council approves the"\nLine 2: "new attendance policy"', answer: 'bad', hint: 'Article "the" is split from its noun — also, articles not allowed in UIL!' },
+                    { prompt: 'Line 1: "Band director leads"\nLine 2: "program to victory"', answer: 'good', hint: 'Clean break between clauses — acceptable.' },
+                    { prompt: 'Line 1: "Senior earns spot on"\nLine 2: "all-state roster"', answer: 'bad', hint: 'Preposition "on" is split from its object.' },
+                    { prompt: 'Line 1: "District hires coach"\nLine 2: "for varsity football"', answer: 'good', hint: '"For" starts a prepositional phrase on line 2 — acceptable from line 1 to 2 context.' },
+                    { prompt: 'Line 1: "School hosts annual"\nLine 2: "food truck festival"', answer: 'good', hint: '"Annual" modifies the noun phrase on line 2 — acceptable.' },
+                    { prompt: 'Line 1: "Club raises money to"\nLine 2: "fund summer trip"', answer: 'bad', hint: '"To" split from "fund" — bad infinitive split.' },
+                    { prompt: 'Line 1: "Students protest against"\nLine 2: "new phone policy"', answer: 'bad', hint: 'Preposition "against" is split from its object.' }
+                ],
+                check: function(answer, exercise) {
+                    var norm = answer.trim().toLowerCase();
+                    if (norm === exercise.answer) return { result: 'correct', message: 'Correct! ' + exercise.hint };
+                    return { result: 'incorrect', message: 'Not quite. ' + exercise.hint };
+                }
+            },
+
+            'fix-it': {
+                title: 'Fix the Headline',
+                instructions: 'This headline has ONE UIL rule violation. Fix the violation and type the corrected headline.',
+                exercises: [
+                    { prompt: 'Team captured state title', acceptable: ['team captures state title', 'team claims state title', 'team wins state title'], hint: 'Past tense "captured" — change to present tense.' },
+                    { prompt: 'A student earns top honor', acceptable: ['student earns top honor'], hint: 'Article "a" — remove it.' },
+                    { prompt: 'Award was given to senior', acceptable: ['senior earns award', 'senior receives award', 'senior wins award'], hint: 'Passive voice "was given" — rewrite in active voice.' },
+                    { prompt: 'The board passes budget plan', acceptable: ['board passes budget plan'], hint: 'Article "the" — remove it.' },
+                    { prompt: 'John Smith wins science fair', acceptable: ['smith wins science fair'], hint: 'First+last name — use last name only.' },
+                    { prompt: 'Band won competition trophy', acceptable: ['band wins competition trophy', 'band claims competition trophy', 'band earns competition trophy'], hint: 'Past tense "won" — change to present.' },
+                    { prompt: 'Choir is selected for state', acceptable: ['choir earns state spot', 'choir advances to state', 'choir qualifies for state'], hint: 'Passive voice "is selected" — rewrite in active voice.' },
+                    { prompt: 'Club raises money for LHS', acceptable: ['club raises money for school', 'club raises money for campus'], hint: 'L-word "LHS" — never use Leaguetown, LHS, or "our school."' },
+                    { prompt: 'District approved new policy', acceptable: ['district approves new policy', 'district adopts new policy'], hint: 'Past tense "approved" — change to present.' },
+                    { prompt: 'Coach gave players new gear', acceptable: ['coach gives players new gear', 'coach provides players new gear'], hint: 'Past tense "gave" — change to present.' },
+                    { prompt: 'An athlete breaks record', acceptable: ['athlete breaks record'], hint: 'Article "an" — remove it.' },
+                    { prompt: 'Students fundraised for trip', acceptable: ['students fundraise for trip', 'students raise funds for trip'], hint: 'Past tense "fundraised" — change to present.' }
+                ],
+                check: function(answer, exercise) {
+                    var norm = answer.trim().toLowerCase().replace(/[^a-z0-9\s]/g, '');
+                    var exactMatch = exercise.acceptable.some(function(a) { return norm === a.toLowerCase(); });
+                    if (exactMatch) return { result: 'correct', message: 'Perfect fix!' };
+                    // Check for common violations
+                    var hasArticle = /\b(a|an|the)\b/i.test(norm);
+                    var hasPast = /\b(won|captured|approved|gave|fundraised)\b/i.test(norm) || /\b\w{3,}ed\b/.test(norm);
+                    var hasPassive = /\b(is|are|was|were)\s+\w+/.test(norm);
+                    if (!hasArticle && !hasPast && !hasPassive && norm.length > 3) return { result: 'partial', message: 'Good fix! Model answer: "' + exercise.acceptable[0] + '"' };
+                    return { result: 'incorrect', message: 'Still has a violation. Try: "' + exercise.acceptable[0] + '"' };
+                }
+            },
+
+            'which-better': {
+                title: 'Which Is Better?',
+                instructions: 'Two headlines for the same story. Type "A" or "B" to pick the better one according to UIL rules.',
+                exercises: [
+                    { prompt: 'Story: School board approves $2M budget for new gym.\nA: Board approves gym funds\nB: The board approved a new gym', answer: 'a', hint: 'B has articles ("the," "a") and past tense ("approved"). A is clean.' },
+                    { prompt: 'Story: Senior wins state debate championship.\nA: Senior John Davis wins state\nB: Davis claims state debate title', answer: 'b', hint: 'A uses first+last name. B uses last name only with a strong verb.' },
+                    { prompt: 'Story: Choir earns spot at national competition.\nA: Choir advances to nationals\nB: Choir was selected for nationals', answer: 'a', hint: 'B uses passive voice ("was selected"). A is active and strong.' },
+                    { prompt: 'Story: Students raise $5,000 for local food bank.\nA: Students raise $5,000 for food bank\nB: LHS students collect food bank money', answer: 'a', hint: 'B uses "LHS" (L-word, never allowed in UIL journalism).' },
+                    { prompt: 'Story: District hires new athletic director.\nA: New athletic director hired\nB: District names athletic director', answer: 'b', hint: 'A is passive ("hired" with no subject doing the action). B has clear subject+verb.' },
+                    { prompt: 'Story: Band wins first place at regional competition.\nA: Band captures first at regionals\nB: Band won first place at regional', answer: 'a', hint: 'B uses past tense "won." A uses present tense "captures."' },
+                    { prompt: 'Story: School implements new cell phone policy starting Monday.\nA: Phone policy starts Monday\nB: School bans phones in class', answer: 'b', hint: 'Both are acceptable, but B is more specific with a stronger verb "bans."' },
+                    { prompt: 'Story: Junior earns perfect score on SAT.\nA: Junior earns perfect SAT score\nB: A junior gets perfect SAT score', answer: 'a', hint: 'B has article "a" and weak verb "gets." A is clean.' },
+                    { prompt: 'Story: Theater program raises funds through outdoor concert.\nA: Concert raises funds for theatre\nB: Theatre had concert for money', answer: 'a', hint: 'B uses past tense "had" and vague "money." A is present tense and clear.' },
+                    { prompt: 'Story: Robotics team advances to state after winning regionals.\nA: Robotics team heads to state\nB: Robotics team advanced to state', answer: 'a', hint: 'B uses past tense "advanced." A uses present tense "heads."' },
+                    { prompt: 'Story: Principal announces retirement after 20 years.\nA: Principal retires after 20 years\nB: Our principal is retiring soon', answer: 'a', hint: 'B uses "our" (L-word territory) and passive construction "is retiring."' },
+                    { prompt: 'Story: Student council votes to change prom venue.\nA: Council switches prom venue\nB: Council votes to change the prom', answer: 'a', hint: 'B has article "the" and weaker verb structure. A is tighter.' }
+                ],
+                check: function(answer, exercise) {
+                    var norm = answer.trim().toLowerCase();
+                    if (norm === exercise.answer) return { result: 'correct', message: 'Right choice! ' + exercise.hint };
+                    return { result: 'incorrect', message: 'Not quite. ' + exercise.hint };
+                }
+            },
+
+            'lead-id': {
+                title: 'Lead Identification',
+                instructions: 'Read this story lead. Which option best captures the MAIN NEWS for a headline? Type "A", "B", or "C".',
+                exercises: [
+                    { prompt: 'Lead: The Leaguetown school board voted 5-2 Tuesday to approve a $3.5 million renovation of the high school cafeteria. The project will begin in June.\n\nA: Board votes on school projects\nB: Board approves $3.5M cafeteria renovation\nC: Cafeteria gets new look this summer', answer: 'b', hint: 'B captures the specific action, dollar amount, and what is being renovated — all from the lead.' },
+                    { prompt: 'Lead: Senior Maria Santos has been named a National Merit Scholar semifinalist, one of only 16,000 students nationwide to receive the honor.\n\nA: Santos earns National Merit honor\nB: Students take standardized tests\nC: College applications increase', answer: 'a', hint: 'A captures who and what — the specific student and her achievement from the lead.' },
+                    { prompt: 'Lead: Leaguetown High will offer its first dual-credit welding course next fall in partnership with Central Texas College. Students can earn up to six college credits.\n\nA: College offers new courses\nB: Students earn college credits\nC: School launches dual-credit welding class', answer: 'c', hint: 'C captures the specific new program from the lead — welding class, dual-credit, new offering.' },
+                    { prompt: 'Lead: The Broncos boys basketball team defeated rival Eastside 67-54 Friday to clinch the district championship for the first time in 12 years.\n\nA: Broncos play Friday night game\nB: Broncos clinch first district title in 12 years\nC: Basketball season ends with win', answer: 'b', hint: 'B captures the significance: first title in 12 years, the specific achievement.' },
+                    { prompt: 'Lead: Beginning next semester, all students will be required to complete 20 hours of community service to graduate, the school board announced Monday.\n\nA: Board meets Monday evening\nB: Students volunteer in community\nC: Board mandates 20 service hours for graduation', answer: 'c', hint: 'C captures the specific policy: who mandated it, what the requirement is, and why.' },
+                    { prompt: 'Lead: The theater department sold out all three performances of their spring production of "Our Town," raising $12,000 for new stage equipment.\n\nA: Drama students perform spring play\nB: Theatre sells out shows, raises $12,000\nC: Students enjoy Our Town production', answer: 'b', hint: 'B captures both key facts: sold out AND fundraising amount from the lead.' },
+                    { prompt: 'Lead: Sophomore Jake Torres broke the school record in the 100-meter dash Saturday with a time of 10.42 seconds at the regional track meet.\n\nA: Track team competes at regionals\nB: Torres sets 100-meter school record\nC: Athletes run fast at track meet', answer: 'b', hint: 'B names the specific athlete and achievement. A and C are too generic.' },
+                    { prompt: 'Lead: The Leaguetown school district will cut four bus routes next year due to a $500,000 budget shortfall, affecting approximately 300 students.\n\nA: District faces budget problems\nB: Bus routes change next year\nC: District cuts 4 bus routes over budget gap', answer: 'c', hint: 'C has the specific number of routes cut AND the reason — most complete lead capture.' },
+                    { prompt: 'Lead: Junior Rebecca Kim was elected student council president Tuesday, defeating three other candidates with 52% of the vote.\n\nA: Kim wins student council presidency\nB: Students vote in school election\nC: Council selects new officers', answer: 'a', hint: 'A captures who won and what position — the main news from the lead.' },
+                    { prompt: 'Lead: A local restaurant donated $15,000 worth of kitchen equipment to the culinary arts program, allowing the school to offer advanced cooking classes for the first time.\n\nA: Restaurant supports local school\nB: Donation funds new culinary classes\nC: Students learn to cook at school', answer: 'b', hint: 'B captures the result of the donation — new classes enabled. Most newsworthy angle.' },
+                    { prompt: 'Lead: The school choir earned a Superior rating at the UIL State Choir Competition Saturday, the highest rating possible and the first in school history.\n\nA: Choir competes at UIL contest\nB: Choir earns first-ever Superior at state\nC: Music program grows at school', answer: 'b', hint: 'B captures the historic achievement — first-ever Superior rating at state level.' },
+                    { prompt: 'Lead: Starting in January, Leaguetown High will require all students to place cell phones in locked pouches during class time as part of a new district-wide policy.\n\nA: School updates technology rules\nB: Students use phones less in class\nC: School mandates phone pouches in class', answer: 'c', hint: 'C captures the specific policy (locked pouches) and when it takes effect.' }
+                ],
+                check: function(answer, exercise) {
+                    var norm = answer.trim().toLowerCase();
+                    if (norm === exercise.answer) return { result: 'correct', message: 'Excellent! ' + exercise.hint };
+                    return { result: 'incorrect', message: 'Not the strongest choice. ' + exercise.hint };
                 }
             }
         };
