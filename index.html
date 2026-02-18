@@ -1418,16 +1418,19 @@
                 streakHtml = '<div class="streak-banner steady">Holding steady around ' + recentAvg.toFixed(1) + '/24. Push for 20+ with targeted drills!</div>';
             }
 
-            // Build SVG chart
-            var chartW = 100; // percentage based
+            // Build SVG chart with proper coordinate space
+            var chartW = 600;
             var chartH = 200;
-            var padding = 30;
-            var plotW = 100; // will be percentage
-            var plotH = chartH - padding * 2;
+            var padLeft = 40;
+            var padRight = 15;
+            var padTop = 15;
+            var padBottom = 15;
+            var plotW = chartW - padLeft - padRight;
+            var plotH = chartH - padTop - padBottom;
 
             var points = sessions.map(function(s, i) {
-                var x = padding + (i / (sessions.length - 1)) * (chartW - padding * 2);
-                var y = padding + plotH - (s.score / maxScore) * plotH;
+                var x = padLeft + (sessions.length === 1 ? plotW / 2 : (i / (sessions.length - 1)) * plotW);
+                var y = padTop + plotH - (s.score / maxScore) * plotH;
                 return { x: x, y: y, score: s.score, date: s.date, mode: s.mode || 'practice' };
             });
 
@@ -1437,23 +1440,23 @@
             }).join(' ');
 
             // Fill area
-            var areaD = pathD + ' L' + points[points.length - 1].x.toFixed(1) + ',' + (chartH - padding) + ' L' + points[0].x.toFixed(1) + ',' + (chartH - padding) + ' Z';
+            var areaD = pathD + ' L' + points[points.length - 1].x.toFixed(1) + ',' + (padTop + plotH) + ' L' + points[0].x.toFixed(1) + ',' + (padTop + plotH) + ' Z';
 
             // Y-axis labels
             var yLabels = [0, 6, 12, 18, 24].map(function(score) {
-                var y = padding + plotH - (score / maxScore) * plotH;
-                return '<text x="' + (padding - 5) + '" y="' + (y + 4) + '" text-anchor="end" fill="#999" font-size="11" font-family="-apple-system, BlinkMacSystemFont, sans-serif">' + score + '</text>' +
-                       '<line x1="' + padding + '" y1="' + y + '" x2="' + (chartW - padding) + '" y2="' + y + '" stroke="#eee" stroke-width="1"/>';
+                var y = padTop + plotH - (score / maxScore) * plotH;
+                return '<text x="' + (padLeft - 8) + '" y="' + (y + 4) + '" text-anchor="end" fill="#999" font-size="11" font-family="-apple-system, BlinkMacSystemFont, sans-serif">' + score + '</text>' +
+                       '<line x1="' + padLeft + '" y1="' + y + '" x2="' + (chartW - padRight) + '" y2="' + y + '" stroke="#eee" stroke-width="1"/>';
             }).join('');
 
             // Dots
             var dots = points.map(function(p) {
                 var color = p.score >= 20 ? '#4caf50' : p.score >= 15 ? '#2196f3' : p.score >= 10 ? '#ff9800' : '#f44336';
-                return '<circle cx="' + p.x.toFixed(1) + '" cy="' + p.y.toFixed(1) + '" r="4" fill="' + color + '" stroke="white" stroke-width="2"/>';
+                return '<circle cx="' + p.x.toFixed(1) + '" cy="' + p.y.toFixed(1) + '" r="5" fill="' + color + '" stroke="white" stroke-width="2"/>';
             }).join('');
 
             var svgChart =
-                '<svg viewBox="0 0 ' + chartW + ' ' + chartH + '" class="chart-canvas" preserveAspectRatio="none">' +
+                '<svg viewBox="0 0 ' + chartW + ' ' + chartH + '" class="chart-canvas">' +
                     yLabels +
                     '<path d="' + areaD + '" fill="rgba(102,126,234,0.1)" />' +
                     '<path d="' + pathD + '" fill="none" stroke="#667eea" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>' +
